@@ -102,6 +102,64 @@ select.form_input {
 .help_hint.is_ok    { color: #16a34a; }
 .help_hint.is_error { color: var(--danger_color); }
 
+/* Zona de subida de imágenes (publicar propiedad) */
+.upload_zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    border: 2px dashed var(--border_color);
+    border-radius: var(--border_radius);
+    padding: 28px 20px;
+    cursor: pointer;
+    color: var(--text_muted);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.upload_zone:hover {
+    border-color: var(--primary_color);
+    background-color: var(--bg_color);
+}
+.upload_zone .material-symbols-outlined {
+    color: var(--primary_color);
+}
+.upload_text {
+    font-weight: 600;
+    color: var(--text_main);
+}
+
+.upload_preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+}
+.upload_thumb {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border_color);
+}
+.upload_thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.thumb_badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background-color: var(--primary_color);
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
 /* Medidor de fortaleza de contraseña (registro de usuario) */
 .strength_meter {
     height: 6px;

@@ -7,31 +7,9 @@
         return;
     }
 
-    // ------------------------------------------------------------------
-    // Datos de ubicación de EJEMPLO.
-    // TODO (fase backend): reemplazar por datos reales de las tablas
-    // PAISES / DEPARTAMENTOS / CIUDADES (vía PHP o fetch a una API).
-    // ------------------------------------------------------------------
-    var UBICACIONES = {
-        paises: [
-            { id: 1, nombre: 'Colombia' }
-        ],
-        departamentos: [
-            { id: 1, pais_id: 1, nombre: 'Cundinamarca' },
-            { id: 2, pais_id: 1, nombre: 'Antioquia' },
-            { id: 3, pais_id: 1, nombre: 'Valle del Cauca' },
-            { id: 4, pais_id: 1, nombre: 'Atlántico' }
-        ],
-        ciudades: [
-            { id: 1, departamento_id: 1, nombre: 'Bogotá' },
-            { id: 2, departamento_id: 1, nombre: 'Soacha' },
-            { id: 3, departamento_id: 2, nombre: 'Medellín' },
-            { id: 4, departamento_id: 2, nombre: 'Envigado' },
-            { id: 5, departamento_id: 3, nombre: 'Cali' },
-            { id: 6, departamento_id: 3, nombre: 'Palmira' },
-            { id: 7, departamento_id: 4, nombre: 'Barranquilla' }
-        ]
-    };
+    // Ubicaciones reales inyectadas por PHP desde la base de datos.
+    // Los ids vienen como texto en el JSON; el cascade compara con ==.
+    var UBICACIONES = window.UBICACIONES || { paises: [], departamentos: [], ciudades: [] };
 
     var selPais = document.getElementById('pais');
     var selDepto = document.getElementById('departamento');
@@ -61,7 +39,7 @@
     selPais.addEventListener('change', function () {
         var paisId = parseInt(selPais.value, 10);
         var deptos = UBICACIONES.departamentos.filter(function (d) {
-            return d.pais_id === paisId;
+            return parseInt(d.pais_id, 10) === paisId;
         });
         llenarSelect(selDepto, deptos, 'Departamento…');
         selDepto.disabled = false;
@@ -75,7 +53,7 @@
     selDepto.addEventListener('change', function () {
         var deptoId = parseInt(selDepto.value, 10);
         var ciudades = UBICACIONES.ciudades.filter(function (c) {
-            return c.departamento_id === deptoId;
+            return parseInt(c.departamento_id, 10) === deptoId;
         });
         llenarSelect(selCiudad, ciudades, 'Ciudad…');
         selCiudad.disabled = false;
@@ -135,6 +113,34 @@
 
     form.addEventListener('input', actualizarProgreso);
     form.addEventListener('change', actualizarProgreso);
+
+    // ------------------------------------------------------------------
+    // Previsualización de las fotos seleccionadas
+    // ------------------------------------------------------------------
+    var inputImagenes = document.getElementById('imagenes');
+    var preview = document.getElementById('upload_preview');
+
+    if (inputImagenes && preview) {
+        inputImagenes.addEventListener('change', function () {
+            preview.innerHTML = '';
+            Array.prototype.forEach.call(inputImagenes.files, function (file, i) {
+                if (!file.type.startsWith('image/')) { return; }
+                var div = document.createElement('div');
+                div.className = 'upload_thumb';
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = function () { URL.revokeObjectURL(img.src); };
+                div.appendChild(img);
+                if (i === 0) {
+                    var badge = document.createElement('span');
+                    badge.className = 'thumb_badge';
+                    badge.textContent = 'Portada';
+                    div.appendChild(badge);
+                }
+                preview.appendChild(div);
+            });
+        });
+    }
 
     // Estado inicial
     actualizarProgreso();

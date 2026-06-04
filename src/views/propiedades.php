@@ -17,7 +17,7 @@ require __DIR__ . '/layouts/header.php';
                 <p class="form_error" role="alert"><?= e($error) ?></p>
             <?php endif; ?>
 
-            <form action="/propiedades" method="POST" id="propiedad_form" novalidate>
+            <form action="/propiedades" method="POST" id="propiedad_form" enctype="multipart/form-data" novalidate>
 
                 <fieldset class="form_fieldset">
                     <legend class="form_legend">Información de la propiedad</legend>
@@ -39,6 +39,20 @@ require __DIR__ . '/layouts/header.php';
                     <div class="form_group">
                         <label for="descripcion" class="form_label">Descripción <span class="label_hint">(Opcional)</span></label>
                         <textarea id="descripcion" name="descripcion" class="form_input" placeholder="Describe la propiedad, su entorno y lo que la hace especial."></textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form_fieldset">
+                    <legend class="form_legend">Fotos</legend>
+                    <div class="form_group">
+                        <label class="form_label">Imágenes de la propiedad <span class="label_hint">(la primera será la portada)</span></label>
+                        <label for="imagenes" class="upload_zone">
+                            <span class="material-symbols-outlined icon_lg">add_photo_alternate</span>
+                            <span class="upload_text">Haz clic para seleccionar fotos</span>
+                            <span class="help_hint">JPG, PNG o WEBP · máx. 3 MB c/u</span>
+                            <input type="file" id="imagenes" name="imagenes[]" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+                        </label>
+                        <div class="upload_preview" id="upload_preview"></div>
                     </div>
                 </fieldset>
 
@@ -162,5 +176,9 @@ require __DIR__ . '/layouts/header.php';
     </div>
 
 <?php $showFooter = false; ?>
+    <script>
+        // Ubicaciones reales desde la base de datos (paises/departamentos/ciudades)
+        window.UBICACIONES = <?= json_encode($ubicaciones ?? ['paises' => [], 'departamentos' => [], 'ciudades' => []], JSON_UNESCAPED_UNICODE) ?>;
+    </script>
     <script src="/js/propiedades.js"></script>
 <?php require __DIR__ . '/layouts/footer.php'; ?>
