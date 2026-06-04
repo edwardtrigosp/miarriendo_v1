@@ -42,6 +42,7 @@ $router->get('/',            [HomeController::class, 'index']);
 $router->get('/arriendos',   [PropiedadController::class, 'index']);
 $router->get('/propiedades', [PropiedadController::class, 'create']);
 $router->post('/propiedades', [PropiedadController::class, 'store']);
+$router->get('/propiedad/{id}', [PropiedadController::class, 'detalle']);
 $router->get('/ruta',        [PropiedadController::class, 'ruta']);
 $router->get('/login',       [AuthController::class, 'showLogin']);
 $router->get('/registro',    [AuthController::class, 'showRegistro']);

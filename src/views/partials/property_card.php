@@ -14,7 +14,7 @@
         <h3 class="property_title"><?= e($p['titulo']) ?></h3>
         <div class="property_location"><span class="material-symbols-outlined icon_sm">location_on</span> <?= e($p['direccion']) ?></div>
         <div class="property_footer">
-            <a href="/ruta?id=<?= e($p['id']) ?>" class="btn_primary u_full_width">¿Cómo llegar?</a>
+            <a href="/propiedad/<?= e($p['id']) ?>" class="btn_primary u_full_width">Ver propiedad</a>
         </div>
     </div>
 </article>

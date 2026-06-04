@@ -168,10 +168,47 @@ class PropiedadController
         }
     }
 
+    /** Detalle de una propiedad. */
+    public function detalle(string $id): void
+    {
+        $propiedad = Propiedad::buscarPorId((int) $id);
+
+        if ($propiedad === null) {
+            http_response_code(404);
+            view('404', ['title' => 'Propiedad no encontrada | 404']);
+            return;
+        }
+
+        view('propiedad', [
+            'title'     => $propiedad['titulo'] . ' | miarriendo.online',
+            'propiedad' => $propiedad,
+            'imagenes'  => ImagenPropiedad::porPropiedad((int) $id),
+        ]);
+    }
+
     /** Vista del mapa con la ruta hacia una propiedad. */
     public function ruta(): void
     {
         // El mapa usa OpenStreetMap (Leaflet), no requiere API key.
-        view('mapa', ['title' => '¿Cómo llegar? | miarriendo.online']);
+        $id = (int) ($_GET['id'] ?? 0);
+        $propiedad = $id > 0 ? Propiedad::buscarPorId($id) : null;
+
+        $destino = null;
+        if ($propiedad !== null) {
+            $calle = trim($propiedad['calle'] . ' ' . ($propiedad['numero_exterior'] ?? ''));
+            $destino = [
+                'texto' => $calle
+                    . (!empty($propiedad['barrio']) ? ', ' . $propiedad['barrio'] : '')
+                    . ', ' . $propiedad['ciudad'] . ', ' . $propiedad['departamento'],
+                'lat'    => $propiedad['latitud']  !== null ? (float) $propiedad['latitud']  : null,
+                'lon'    => $propiedad['longitud'] !== null ? (float) $propiedad['longitud'] : null,
+                'titulo' => $propiedad['titulo'],
+            ];
+        }
+
+        view('mapa', [
+            'title'   => '¿Cómo llegar? | miarriendo.online',
+            'destino' => $destino,
+        ]);
     }
 }

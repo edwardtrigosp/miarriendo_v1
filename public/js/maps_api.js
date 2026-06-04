@@ -6,6 +6,7 @@ let rutaLayer = null;       // capa de la línea de ruta
 let origenMarker = null;
 let destinoMarker = null;
 let origenCoords = null;    // { lat, lon } del punto de partida
+let destinoFijo = null;     // { lat, lon } de la propiedad (si vino del backend)
 let modoClicMapa = false;   // true mientras se espera un clic en el mapa
 let debounceId = null;      // temporizador para el autocompletado
 
@@ -18,7 +19,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     iniciarMapa();
     conectarControles();
+    prepararDestino();
 });
+
+// ------------------------------------------------------------------
+// Destino precargado desde la propiedad (window.RUTA_DESTINO)
+// ------------------------------------------------------------------
+function prepararDestino() {
+    if (typeof window.RUTA_DESTINO === 'undefined' || !window.RUTA_DESTINO) {
+        return;
+    }
+    var d = window.RUTA_DESTINO;
+
+    // Si la propiedad tiene coordenadas guardadas, las usamos directamente
+    if (typeof d.lat === 'number' && typeof d.lon === 'number') {
+        destinoFijo = { lat: d.lat, lon: d.lon };
+        marcarDestino(destinoFijo, d.titulo || 'Propiedad');
+        map.setView([d.lat, d.lon], 15);
+        return;
+    }
+
+    // Si no, geocodificamos el texto para centrar y marcar el destino
+    if (d.texto) {
+        geocode(d.texto).then(function (coords) {
+            if (coords) {
+                destinoFijo = coords;
+                marcarDestino(coords, d.titulo || 'Propiedad');
+                map.setView([coords.lat, coords.lon], 15);
+            }
+        });
+    }
+}
+
+function marcarDestino(coords, titulo) {
+    if (destinoMarker) { map.removeLayer(destinoMarker); }
+    destinoMarker = L.circleMarker([coords.lat, coords.lon], {
+        radius: 9, color: '#8917D4', fillColor: '#ffffff', fillOpacity: 1, weight: 3
+    }).addTo(map).bindPopup(titulo).openPopup();
+}
 
 // ------------------------------------------------------------------
 // Mapa base
@@ -250,10 +288,12 @@ function calcularRuta() {
 
     estado.textContent = 'Calculando ruta…';
 
-    // Resuelve coordenadas de origen (si solo hay texto) y de destino, luego ruta
-    var promesaOrigen = origenCoords ? Promise.resolve(origenCoords) : geocode(origenTexto);
+    // Resuelve coordenadas de origen (si solo hay texto) y de destino, luego ruta.
+    // Si el destino vino fijado por la propiedad, usamos esas coordenadas directamente.
+    var promesaOrigen  = origenCoords ? Promise.resolve(origenCoords) : geocode(origenTexto);
+    var promesaDestino = destinoFijo  ? Promise.resolve(destinoFijo)  : geocode(destino);
 
-    Promise.all([promesaOrigen, geocode(destino)])
+    Promise.all([promesaOrigen, promesaDestino])
         .then(function (puntos) {
             var o = puntos[0];
             var d = puntos[1];
