@@ -24,11 +24,11 @@ require __DIR__ . '/layouts/header.php';
                     <div class="form_row_double">
                         <div class="form_group">
                             <label for="nombre" class="form_label">Nombre</label>
-                            <input type="text" id="nombre" name="nombre" class="form_input" placeholder="Ej. Juan" autocomplete="given-name" required>
+                            <input type="text" id="nombre" name="nombre" class="form_input" placeholder="Ej. Juan" value="<?= e($datos['nombre'] ?? '') ?>" autocomplete="given-name" required>
                         </div>
                         <div class="form_group">
                             <label for="apellidos" class="form_label">Apellidos</label>
-                            <input type="text" id="apellidos" name="apellidos" class="form_input" placeholder="Ej. Pérez" autocomplete="family-name" required>
+                            <input type="text" id="apellidos" name="apellidos" class="form_input" placeholder="Ej. Pérez" value="<?= e($datos['apellidos'] ?? '') ?>" autocomplete="family-name" required>
                         </div>
                     </div>
                 </fieldset>
@@ -37,11 +37,11 @@ require __DIR__ . '/layouts/header.php';
                     <legend class="form_legend">Datos de contacto</legend>
                     <div class="form_group">
                         <label for="email" class="form_label">Correo electrónico</label>
-                        <input type="email" id="email" name="email" class="form_input" placeholder="tu@email.com" autocomplete="email" required>
+                        <input type="email" id="email" name="email" class="form_input" placeholder="tu@email.com" value="<?= e($datos['email'] ?? '') ?>" autocomplete="email" required>
                     </div>
                     <div class="form_group">
                         <label for="telefono" class="form_label">Teléfono <span class="label_hint">(Opcional)</span></label>
-                        <input type="tel" id="telefono" name="telefono" class="form_input" placeholder="+57 300 000 0000" autocomplete="tel" inputmode="tel" maxlength="20">
+                        <input type="tel" id="telefono" name="telefono" class="form_input" placeholder="+57 300 000 0000" value="<?= e($datos['telefono'] ?? '') ?>" autocomplete="tel" inputmode="tel" maxlength="20">
                     </div>
                 </fieldset>
 

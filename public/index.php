@@ -5,6 +5,9 @@
  * Todas las peticiones pasan por aquí gracias al .htaccess.
  */
 
+// Zona horaria de Colombia (UTC-5) para todas las fechas de PHP
+date_default_timezone_set('America/Bogota');
+
 session_start();
 
 // Ruta raíz del proyecto (carpeta que contiene /src y /public).
@@ -13,6 +16,10 @@ define('BASE_PATH', dirname(__DIR__));
 // Núcleo
 require_once BASE_PATH . '/src/core/helpers.php';
 require_once BASE_PATH . '/src/core/Router.php';
+
+// Configuración y modelos
+require_once BASE_PATH . '/src/config/database.php';
+require_once BASE_PATH . '/src/models/Usuario.php';
 
 // Controladores
 require_once BASE_PATH . '/src/controllers/HomeController.php';
