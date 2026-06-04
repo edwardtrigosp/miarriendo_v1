@@ -16,6 +16,7 @@ define('BASE_PATH', dirname(__DIR__));
 // Núcleo
 require_once BASE_PATH . '/src/core/helpers.php';
 require_once BASE_PATH . '/src/core/Router.php';
+require_once BASE_PATH . '/src/core/Geocoder.php';
 
 // Configuración y modelos
 require_once BASE_PATH . '/src/config/database.php';

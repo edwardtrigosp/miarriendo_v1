@@ -61,6 +61,13 @@ class PropiedadController
         $numEntero = static fn($v) => ($v ?? '') !== '' ? (int) $v : null;
         $numFloat  = static fn($v) => ($v ?? '') !== '' ? (float) $v : null;
 
+        $barrio  = trim($_POST['barrio'] ?? '') ?: null;
+        $numExt  = trim($_POST['numero_exterior'] ?? '') ?: null;
+
+        // Geocodifica la dirección (fuera de la transacción: es una llamada de red).
+        // Si falla, las coordenadas quedan en null y la publicación continúa igual.
+        $coords = self::geocodificarDireccion($ciudadId, $calle, $numExt, $barrio);
+
         $pdo = Database::conexion();
         $pdo->beginTransaction();
         try {
@@ -68,10 +75,12 @@ class PropiedadController
             $direccionId = Direccion::crear([
                 'ciudad_id'       => $ciudadId,
                 'calle'           => $calle,
-                'numero_exterior' => trim($_POST['numero_exterior'] ?? '') ?: null,
-                'barrio'          => trim($_POST['barrio'] ?? '') ?: null,
+                'numero_exterior' => $numExt,
+                'barrio'          => $barrio,
                 'codigo_postal'   => trim($_POST['codigo_postal'] ?? '') ?: null,
                 'referencia'      => trim($_POST['referencia'] ?? '') ?: null,
+                'latitud'         => $coords['lat'] ?? null,
+                'longitud'        => $coords['lon'] ?? null,
             ]);
 
             // 2) Crear la propiedad ligada a esa dirección
@@ -166,6 +175,28 @@ class PropiedadController
             ]);
             $guardadas++;
         }
+    }
+
+    /**
+     * Arma el texto de la dirección y obtiene sus coordenadas con Nominatim.
+     * @return array{lat:float,lon:float}|null
+     */
+    private static function geocodificarDireccion(int $ciudadId, string $calle, ?string $numExt, ?string $barrio): ?array
+    {
+        $ubic = Ubicacion::nombresPorCiudad($ciudadId);
+        if ($ubic === null) {
+            return null;
+        }
+
+        $partes = array_filter([
+            trim($calle . ' ' . ($numExt ?? '')),
+            $barrio,
+            $ubic['ciudad'],
+            $ubic['departamento'],
+            'Colombia',
+        ]);
+
+        return Geocoder::geocodificar(implode(', ', $partes));
     }
 
     /** Detalle de una propiedad. */

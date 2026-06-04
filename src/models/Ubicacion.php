@@ -26,4 +26,19 @@ class Ubicacion
         $stmt->execute([':id' => $id]);
         return (bool) $stmt->fetchColumn();
     }
+
+    /**
+     * Nombres de ciudad y departamento de una ciudad. Útil para geocodificar.
+     * @return array{ciudad:string,departamento:string}|null
+     */
+    public static function nombresPorCiudad(int $id): ?array
+    {
+        $sql = "SELECT c.nombre AS ciudad, dep.nombre AS departamento
+                FROM ciudades c
+                JOIN departamentos dep ON c.departamento_id = dep.departamento_id
+                WHERE c.ciudad_id = :id";
+        $stmt = Database::conexion()->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
 }
