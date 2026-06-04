@@ -87,7 +87,7 @@ class PropiedadController
             ]);
 
             // 2) Crear la propiedad ligada a esa dirección
-            Propiedad::crear([
+            $propiedadId = Propiedad::crear([
                 'propietario_id'          => (int) $_SESSION['usuario_id'],
                 'direccion_id'            => $direccionId,
                 'titulo'                  => $titulo,
@@ -114,7 +114,70 @@ class PropiedadController
             return;
         }
 
+        // Las imágenes se procesan fuera de la transacción (mover archivos no es transaccional)
+        $this->procesarImagenes($propiedadId);
+
         redirect('/arriendos');
+    }
+
+    /**
+     * Guarda las imágenes subidas (input name="imagenes[]") en disco y BD.
+     * La primera imagen válida se marca como principal.
+     */
+    private function procesarImagenes(int $propiedadId): void
+    {
+        if (empty($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
+            return;
+        }
+
+        $dir = BASE_PATH . '/public/uploads/propiedades';
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+
+        // Extensión válida según el tipo real de imagen detectado
+        $extensiones = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG  => 'png',
+            IMAGETYPE_WEBP => 'webp',
+            IMAGETYPE_GIF  => 'gif',
+        ];
+        $maxBytes = 3 * 1024 * 1024; // 3 MB
+
+        $guardadas = 0;
+        $total = count($_FILES['imagenes']['name']);
+
+        for ($i = 0; $i < $total; $i++) {
+            if ($_FILES['imagenes']['error'][$i] !== UPLOAD_ERR_OK) {
+                continue;
+            }
+            if ($_FILES['imagenes']['size'][$i] > $maxBytes) {
+                continue;
+            }
+
+            $tmp  = $_FILES['imagenes']['tmp_name'][$i];
+            $info = @getimagesize($tmp); // verifica que sea una imagen real
+            if ($info === false || !isset($extensiones[$info[2]])) {
+                continue;
+            }
+
+            $ext     = $extensiones[$info[2]];
+            $nombre  = uniqid('prop' . $propiedadId . '_', true) . '.' . $ext;
+            $destino = $dir . '/' . $nombre;
+
+            if (!move_uploaded_file($tmp, $destino)) {
+                continue;
+            }
+
+            ImagenPropiedad::crear([
+                'propiedad_id' => $propiedadId,
+                'url_imagen'   => '/uploads/propiedades/' . $nombre,
+                'descripcion'  => null,
+                'orden'        => $guardadas,
+                'es_principal' => $guardadas === 0 ? 1 : 0,
+            ]);
+            $guardadas++;
+        }
     }
 
     /** Vista del mapa con la ruta hacia una propiedad. */

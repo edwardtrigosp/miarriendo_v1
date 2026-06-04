@@ -114,6 +114,34 @@
     form.addEventListener('input', actualizarProgreso);
     form.addEventListener('change', actualizarProgreso);
 
+    // ------------------------------------------------------------------
+    // Previsualización de las fotos seleccionadas
+    // ------------------------------------------------------------------
+    var inputImagenes = document.getElementById('imagenes');
+    var preview = document.getElementById('upload_preview');
+
+    if (inputImagenes && preview) {
+        inputImagenes.addEventListener('change', function () {
+            preview.innerHTML = '';
+            Array.prototype.forEach.call(inputImagenes.files, function (file, i) {
+                if (!file.type.startsWith('image/')) { return; }
+                var div = document.createElement('div');
+                div.className = 'upload_thumb';
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = function () { URL.revokeObjectURL(img.src); };
+                div.appendChild(img);
+                if (i === 0) {
+                    var badge = document.createElement('span');
+                    badge.className = 'thumb_badge';
+                    badge.textContent = 'Portada';
+                    div.appendChild(badge);
+                }
+                preview.appendChild(div);
+            });
+        });
+    }
+
     // Estado inicial
     actualizarProgreso();
 })();

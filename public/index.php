@@ -23,6 +23,7 @@ require_once BASE_PATH . '/src/models/Usuario.php';
 require_once BASE_PATH . '/src/models/Ubicacion.php';
 require_once BASE_PATH . '/src/models/Direccion.php';
 require_once BASE_PATH . '/src/models/Propiedad.php';
+require_once BASE_PATH . '/src/models/ImagenPropiedad.php';
 
 // Controladores
 require_once BASE_PATH . '/src/controllers/HomeController.php';

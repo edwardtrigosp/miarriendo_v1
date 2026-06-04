@@ -1,3 +1,7 @@
+# Límites de subida de archivos (varias fotos por propiedad)
+php_value upload_max_filesize 5M
+php_value post_max_size 30M
+
 # Activar motor de reescritura de URLs
 RewriteEngine On
 
