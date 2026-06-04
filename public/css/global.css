@@ -234,6 +234,22 @@ body {
     font-size: 0.9rem;
 }
 
+/* Estado vacío (sin resultados / sin datos) */
+.empty_state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text_muted);
+}
+.empty_state .material-symbols-outlined {
+    font-size: 3rem;
+    color: var(--border_color);
+    margin-bottom: 12px;
+}
+.empty_state p {
+    margin-bottom: 20px;
+    font-size: 1.05rem;
+}
+
 /* Página de error (404) */
 .error_page {
     display: flex;

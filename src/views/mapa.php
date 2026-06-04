@@ -2,6 +2,9 @@
 $title  = '¿Cómo llegar? | miarriendo.online';
 $styles = ['mapa.css'];
 require __DIR__ . '/layouts/header.php';
+
+$destino = $destino ?? null;
+$destinoTexto = $destino['texto'] ?? 'Calle 127 # 45 - 10, Bogotá';
 ?>
 
     <!-- Leaflet (OpenStreetMap) — CSS -->
@@ -45,7 +48,7 @@ require __DIR__ . '/layouts/header.php';
 
                     <div class="ruta_field">
                         <span class="ruta_icon ruta_icon_dest" aria-hidden="true"></span>
-                        <input type="text" id="destino" class="ruta_input" placeholder="Destino" value="Calle 127 # 45 - 10, Bogotá">
+                        <input type="text" id="destino" class="ruta_input" placeholder="Destino" value="<?= e($destinoTexto) ?>"<?= $destino ? ' readonly' : '' ?>>
                     </div>
 
                     <div class="ruta_field">
@@ -96,5 +99,15 @@ require __DIR__ . '/layouts/header.php';
     <!-- Leaflet (OpenStreetMap) — JS, antes de nuestro script -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <?php if ($destino): ?>
+    <script>
+        window.RUTA_DESTINO = <?= json_encode([
+            'texto' => $destino['texto'],
+            'lat'   => $destino['lat'],
+            'lon'   => $destino['lon'],
+            'titulo'=> $destino['titulo'],
+        ], JSON_UNESCAPED_UNICODE) ?>;
+    </script>
+    <?php endif; ?>
     <script src="/js/maps_api.js"></script>
 <?php require __DIR__ . '/layouts/footer.php'; ?>

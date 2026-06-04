@@ -57,7 +57,7 @@ class AuthController
         ]);
 
         $this->iniciarSesion($id, $nombre, 'usuario');
-        redirect('/perfil');
+        redirect('/panel');
     }
 
     /** Procesa el formulario de login. */
@@ -89,7 +89,7 @@ class AuthController
 
         Usuario::actualizarUltimoAcceso((int) $usuario['usuario_id']);
         $this->iniciarSesion((int) $usuario['usuario_id'], $usuario['nombre'], $usuario['rol']);
-        redirect('/perfil');
+        redirect('/panel');
     }
 
     /** Cierra la sesión. */
