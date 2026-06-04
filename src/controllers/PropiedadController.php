@@ -9,19 +9,7 @@ class PropiedadController
     public function index(): void
     {
         $filas = Propiedad::listarDisponibles();
-
-        // Adaptar los datos a lo que espera la vista
-        $propiedades = array_map(static function (array $p): array {
-            $direccion = trim($p['calle'] . ' ' . ($p['numero_exterior'] ?? '')) . ', ' . $p['ciudad'];
-            return [
-                'id'        => $p['propiedad_id'],
-                'titulo'    => $p['titulo'],
-                'precio'    => $p['precio_alquiler_mensual'],
-                'direccion' => $direccion,
-                'imagen'    => $p['imagen'] ?: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=500&q=80',
-                'estado'    => 'Disponible',
-            ];
-        }, $filas);
+        $propiedades = array_map([Propiedad::class, 'formatearParaTarjeta'], $filas);
 
         view('arriendos', [
             'title'       => 'Explorar Arriendos | miarriendo.online',

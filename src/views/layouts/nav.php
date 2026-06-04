@@ -11,6 +11,7 @@ $autenticado = isset($_SESSION['usuario_id']);
         <a href="/blog" class="nav_link_item">Blog</a>
         <?php if ($autenticado): ?>
             <a href="/propiedades" class="nav_link_item">Publicar</a>
+            <a href="/panel" class="nav_link_item">Mi Panel</a>
             <a href="/perfil" class="btn_outline">Mi Perfil</a>
             <a href="/logout" class="nav_link_item">Cerrar Sesión</a>
         <?php else: ?>
