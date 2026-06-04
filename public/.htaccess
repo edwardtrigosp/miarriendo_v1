@@ -1,0 +1,9 @@
+# Activar motor de reescritura de URLs
+RewriteEngine On
+
+# Si el archivo o carpeta existe (css, js, imágenes), servirlo directamente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Todo lo demás se redirige al front controller (router)
+RewriteRule ^ index.php [QSA,L]

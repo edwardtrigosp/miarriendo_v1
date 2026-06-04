@@ -1,0 +1,54 @@
+/* Página legal (cookies) — ancho cómodo de lectura */
+.legal_page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 0 80px;
+}
+
+.legal_header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border_color);
+    padding-bottom: 24px;
+}
+
+.legal_section {
+    margin-bottom: 36px;
+}
+
+.legal_section h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text_main);
+}
+
+.legal_section p {
+    color: var(--text_main);
+    line-height: 1.7;
+}
+
+/* Tabla de cookies */
+.cookie_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.95rem;
+}
+
+.cookie_table th,
+.cookie_table td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border_color);
+    vertical-align: top;
+}
+
+.cookie_table th {
+    background-color: var(--accent_color);
+    color: var(--primary_color);
+    font-weight: 600;
+}
+
+.cookie_table tbody tr:hover {
+    background-color: var(--bg_color);
+}

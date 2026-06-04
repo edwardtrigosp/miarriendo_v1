@@ -1,0 +1,45 @@
+services:
+  # Servidor web: PHP + Apache (tu app)
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  # Base de datos MySQL
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:3306"   # 3307 en tu PC -> 3306 dentro del contenedor
+    volumes:
+      - db_data:/var/lib/mysql
+      # Importa automáticamente el esquema la PRIMERA vez que se crea la base
+      - ./database:/docker-entrypoint-initdb.d
+
+  # phpMyAdmin: administrar la base desde el navegador
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
+
+# Volumen para que los datos de MySQL NO se borren al apagar el contenedor
+volumes:
+  db_data:

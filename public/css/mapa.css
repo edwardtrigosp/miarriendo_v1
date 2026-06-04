@@ -1,0 +1,280 @@
+/* ================================================================
+   Página de ruta: panel-tarjeta a la izquierda + mapa grande.
+   Inspirado en el layout de apps de movilidad, con estilo miarriendo.
+   ================================================================ */
+.ruta_layout {
+    display: flex;
+    gap: 24px;
+    max-width: 1400px;
+    height: calc(100vh - 66px); /* alto de pantalla menos el nav */
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* ---- Panel izquierdo ---- */
+.ruta_panel {
+    width: 380px;
+    flex-shrink: 0;
+}
+
+.ruta_card {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_sm);
+    padding: 28px;
+}
+
+.ruta_title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+}
+
+.ruta_subtitle {
+    color: var(--text_muted);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+}
+
+/* Campos tipo "pill" */
+.ruta_field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--bg_color);
+    border: 1px solid transparent;
+    border-radius: var(--border_radius);
+    padding: 2px 16px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.ruta_field:focus-within {
+    border-color: var(--primary_color);
+    background-color: var(--surface_color);
+}
+
+.ruta_input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 13px 0;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text_main);
+}
+
+select.ruta_input {
+    cursor: pointer;
+}
+
+/* Iconos de origen (círculo) y destino (cuadrado) */
+.ruta_icon {
+    flex-shrink: 0;
+    font-size: 1.3rem;
+    color: var(--primary_color);
+    display: flex;
+    align-items: center;
+}
+.ruta_icon_origin,
+.ruta_icon_dest {
+    width: 12px;
+    height: 12px;
+    background-color: var(--primary_color);
+}
+.ruta_icon_origin { border-radius: 50%; }
+.ruta_icon_dest   { border-radius: 3px; }
+
+/* ---- Autocompletado del punto de partida ---- */
+.ruta_origin_group {
+    position: relative;
+}
+
+.ruta_dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_md);
+    padding: 6px;
+    max-height: 360px;
+    overflow-y: auto;
+}
+.ruta_dropdown[hidden] {
+    display: none;
+}
+
+.ruta_option,
+.ruta_suggestion {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: inherit;
+    color: var(--text_main);
+}
+.ruta_option:hover,
+.ruta_suggestion:hover {
+    background-color: var(--bg_color);
+}
+
+.ruta_option_icon,
+.ruta_suggestion_icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bg_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+.ruta_option_icon {
+    color: var(--primary_color);
+}
+.ruta_suggestion_icon {
+    color: var(--text_muted);
+}
+
+.ruta_option_text,
+.ruta_suggestion_text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.ruta_option_text strong,
+.ruta_suggestion_text strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.ruta_option_text small,
+.ruta_suggestion_text small {
+    color: var(--text_muted);
+    font-size: 0.8rem;
+}
+
+/* Separador entre las opciones fijas y las sugerencias */
+.ruta_suggestions {
+    list-style: none;
+}
+.ruta_suggestions:not(:empty) {
+    border-top: 1px solid var(--border_color);
+    margin-top: 6px;
+    padding-top: 6px;
+}
+
+.ruta_submit {
+    margin-top: 8px;
+}
+
+/* Resultado (tiempo / distancia) */
+.ruta_resultado {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border_color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.ruta_resultado[hidden] {
+    display: none;
+}
+.ruta_resultado_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text_muted);
+}
+.ruta_resultado_row strong {
+    color: var(--primary_color);
+    font-size: 1.05rem;
+}
+
+/* Botones para abrir la navegación en apps externas */
+.ruta_apps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+.ruta_app_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    background-color: var(--surface_color);
+    color: var(--text_main);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+.ruta_app_btn:hover {
+    border-color: var(--primary_color);
+    color: var(--primary_color);
+}
+
+.ruta_estado {
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: var(--text_muted);
+    line-height: 1.4;
+    min-height: 1em;
+}
+
+.ruta_volver {
+    display: inline-block;
+    margin-top: 24px;
+    color: var(--text_muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.ruta_volver:hover {
+    color: var(--primary_color);
+}
+
+/* ---- Mapa ---- */
+.ruta_map {
+    flex: 1;
+    border-radius: var(--border_radius);
+    background-color: var(--bg_color);
+    overflow: hidden;
+    box-shadow: var(--shadow_sm);
+}
+
+/* ---- Responsive: apilar en móvil ---- */
+@media (max-width: 760px) {
+    .ruta_layout {
+        flex-direction: column;
+        height: auto;
+        padding: 16px;
+    }
+    .ruta_panel {
+        width: 100%;
+    }
+    .ruta_map {
+        height: 55vh;
+        min-height: 320px;
+    }
+}
