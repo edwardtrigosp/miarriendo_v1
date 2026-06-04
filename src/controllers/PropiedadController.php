@@ -18,6 +18,7 @@ class PropiedadController
     /** Formulario para publicar un inmueble. */
     public function create(): void
     {
+        requiereLogin();
         view('propiedades', ['title' => 'Publicar Propiedad | miarriendo.online']);
     }
 

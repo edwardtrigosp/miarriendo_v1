@@ -7,7 +7,17 @@ class PerfilController
 {
     public function index(): void
     {
-        // TODO (fase backend): cargar datos reales del usuario en sesión.
-        view('perfil', ['title' => 'Configuración de Perfil | miarriendo.online']);
+        requiereLogin();
+
+        $u = Usuario::buscarPorId((int) $_SESSION['usuario_id']);
+        view('perfil', [
+            'title'   => 'Configuración de Perfil | miarriendo.online',
+            'usuario' => [
+                'nombre'    => $u['nombre'] ?? '',
+                'apellidos' => $u['apellidos'] ?? '',
+                'email'     => $u['email'] ?? '',
+                'telefono'  => $u['telefono'] ?? '',
+            ],
+        ]);
     }
 }

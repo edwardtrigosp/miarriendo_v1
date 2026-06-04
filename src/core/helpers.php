@@ -43,6 +43,45 @@ if (!function_exists('redirect')) {
     }
 }
 
+if (!function_exists('auth')) {
+    /**
+     * Devuelve los datos del usuario en sesión, o null si no hay sesión.
+     * @return array{id:int,nombre:string,rol:string}|null
+     */
+    function auth(): ?array
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            return null;
+        }
+        return [
+            'id'     => (int) $_SESSION['usuario_id'],
+            'nombre' => $_SESSION['usuario_nombre'] ?? '',
+            'rol'    => $_SESSION['usuario_rol'] ?? 'usuario',
+        ];
+    }
+}
+
+if (!function_exists('requiereLogin')) {
+    /** Si no hay sesión activa, redirige al login. */
+    function requiereLogin(): void
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            redirect('/login');
+        }
+    }
+}
+
+if (!function_exists('requiereAdmin')) {
+    /** Si no es admin, redirige al inicio. */
+    function requiereAdmin(): void
+    {
+        requiereLogin();
+        if (($_SESSION['usuario_rol'] ?? 'usuario') !== 'admin') {
+            redirect('/');
+        }
+    }
+}
+
 if (!function_exists('env')) {
     /**
      * Lee una variable de configuración.
