@@ -162,5 +162,9 @@ require __DIR__ . '/layouts/header.php';
     </div>
 
 <?php $showFooter = false; ?>
+    <script>
+        // Ubicaciones reales desde la base de datos (paises/departamentos/ciudades)
+        window.UBICACIONES = <?= json_encode($ubicaciones ?? ['paises' => [], 'departamentos' => [], 'ciudades' => []], JSON_UNESCAPED_UNICODE) ?>;
+    </script>
     <script src="/js/propiedades.js"></script>
 <?php require __DIR__ . '/layouts/footer.php'; ?>

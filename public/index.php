@@ -20,6 +20,9 @@ require_once BASE_PATH . '/src/core/Router.php';
 // Configuración y modelos
 require_once BASE_PATH . '/src/config/database.php';
 require_once BASE_PATH . '/src/models/Usuario.php';
+require_once BASE_PATH . '/src/models/Ubicacion.php';
+require_once BASE_PATH . '/src/models/Direccion.php';
+require_once BASE_PATH . '/src/models/Propiedad.php';
 
 // Controladores
 require_once BASE_PATH . '/src/controllers/HomeController.php';
@@ -35,6 +38,7 @@ $router = new Router();
 $router->get('/',            [HomeController::class, 'index']);
 $router->get('/arriendos',   [PropiedadController::class, 'index']);
 $router->get('/propiedades', [PropiedadController::class, 'create']);
+$router->post('/propiedades', [PropiedadController::class, 'store']);
 $router->get('/ruta',        [PropiedadController::class, 'ruta']);
 $router->get('/login',       [AuthController::class, 'showLogin']);
 $router->get('/registro',    [AuthController::class, 'showRegistro']);
