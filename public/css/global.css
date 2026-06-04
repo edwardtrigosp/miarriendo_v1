@@ -1,0 +1,311 @@
+/* Importación de la fuente moderna Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+
+  /* Colores de marca y acción (morado corporativo) */
+  --primary_color: #8917D4;   /* Color principal: logo y botones primarios */
+  --primary_hover: #7412B5;   /* Variante más oscura para hover */
+  --accent_color:  #F4E7FF;   /* Morado muy claro para fondos sutiles (badges/estados) */
+
+  /* Fondos y superficies (tema claro) */
+  --bg_color:      #F5F5F5;   /* Fondo general de la página */
+  --surface_color: #FFFFFF;   /* Fondo de tarjetas, nav y superficies elevadas */
+
+  /* Tipografía y bordes */
+  --text_main:    #1E2229;    /* Texto principal (títulos) */
+  --text_muted:   #8B96A8;    /* Texto secundario (descripciones, menús inactivos) */
+  --border_color: #E5E7EB;    /* Líneas divisorias suaves */
+  --danger_color: #EF4444;    /* Errores y acciones destructivas */
+
+  /* Constantes de estructura */
+  --font_family: 'Inter', sans-serif;
+  --border_radius: 10px;
+  --shadow_sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow_md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Reseteo CSS global */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ----------------------------------------------------------------
+   Iconos Material Symbols (sistema de diseño)
+   Uso: <span class="material-symbols-outlined">home</span>
+   ---------------------------------------------------------------- */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.25rem;       /* tamaño por defecto, se hereda con font-size */
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    vertical-align: middle;
+    user-select: none;
+}
+
+/* Variantes de tamaño */
+.icon_sm { font-size: 1rem; }
+.icon_lg { font-size: 1.5rem; }
+.icon_xl { font-size: 2rem; }
+
+body {
+    font-family: var(--font_family);
+    background-color: var(--bg_color);
+    color: var(--text_main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Contenedor de diseño */
+.main_container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Barra de navegación común */
+.nav_bar {
+    background-color: var(--surface_color);
+    border-bottom: 1px solid var(--border_color);
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow_sm);
+}
+
+.nav_logo {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--primary_color);
+    text-decoration: none;
+    letter-spacing: -0.025em;
+}
+
+.nav_links {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.nav_link_item {
+    color: var(--text_muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.nav_link_item:hover {
+    color: var(--text_main);
+}
+
+/* Botones del sistema de diseño */
+.btn_primary {
+    background-color: var(--primary_color);
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: var(--border_radius);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn_primary:hover {
+    background-color: var(--primary_hover);
+}
+
+.btn_primary:active {
+    transform: scale(0.98);
+}
+
+.btn_outline {
+    background-color: transparent;
+    color: var(--primary_color);
+    padding: 11px 23px;
+    border-radius: var(--border_radius);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid var(--primary_color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn_outline:hover {
+    background-color: var(--primary_color);
+    color: #ffffff;
+}
+
+/* Variantes de botón */
+.btn_sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.btn_danger {
+    border-color: var(--danger_color);
+    color: var(--danger_color);
+}
+
+.btn_danger:hover {
+    background-color: var(--danger_color);
+    color: #ffffff;
+}
+
+/* Footer atómico */
+.footer_main {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text_muted);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border_color);
+    margin-top: 80px;
+}
+
+.footer_links {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.footer_links a {
+    color: var(--text_muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.footer_links a:hover {
+    color: var(--primary_color);
+}
+
+/* Enlace de texto resaltado (color de marca) */
+.text_link {
+    color: var(--primary_color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.text_link:hover {
+    text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------
+   Clases utilitarias (reemplazan estilos inline en el HTML)
+   ---------------------------------------------------------------- */
+.u_text_center { text-align: center; }
+.u_text_muted  { color: var(--text_muted); }
+.u_full_width  { width: 100%; }
+.u_mt_sm       { margin-top: 8px; }
+
+/* Mensaje de error de formulario */
+.form_error {
+    color: var(--danger_color);
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--border_radius);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+/* Página de error (404) */
+.error_page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+    padding: 20px;
+}
+
+.error_code {
+    font-size: 8rem;
+    color: var(--primary_color);
+    line-height: 1;
+}
+
+.error_page h2 {
+    margin-bottom: 20px;
+}
+
+.error_page p {
+    color: var(--text_muted);
+    margin-bottom: 40px;
+}
+
+/* ----------------------------------------------------------------
+   Banner de consentimiento de cookies (visible en todo el sitio)
+   ---------------------------------------------------------------- */
+.cookie_banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 760px;
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_md);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 200;
+}
+
+.cookie_banner[hidden] {
+    display: none;
+}
+
+.cookie_banner_text {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--text_muted);
+    line-height: 1.5;
+}
+
+.cookie_banner_actions {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .cookie_banner {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .cookie_banner_actions {
+        justify-content: center;
+    }
+}

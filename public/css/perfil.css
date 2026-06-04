@@ -1,0 +1,116 @@
+.profile_layout {
+    display: flex;
+    gap: 32px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+    align-items: flex-start;
+  }
+  
+  /* Sidebar de Navegación del Perfil */
+  .profile_sidebar {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  
+  .sidebar_link {
+    padding: 12px 16px;
+    border-radius: var(--border_radius);
+    color: var(--text_muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .sidebar_link:hover {
+    background-color: var(--bg_color);
+    color: var(--text_main);
+  }
+  
+  .sidebar_link.active {
+    background-color: var(--accent_color); /* Morado muy claro de marca */
+    color: var(--primary_color);
+    font-weight: 600;
+  }
+  
+  /* Panel Principal de Contenido */
+  .profile_content {
+    flex: 1;
+    background-color: var(--surface_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_sm);
+    border: 1px solid var(--border_color);
+    padding: 40px;
+  }
+  
+  .profile_header {
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border_color);
+    padding-bottom: 24px;
+  }
+  
+  .profile_title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text_main);
+    margin-bottom: 8px;
+  }
+  
+  .profile_subtitle {
+    color: var(--text_muted);
+    font-size: 0.95rem;
+  }
+  
+  /* Sección del Avatar (Foto de perfil) */
+  .avatar_section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  
+  .avatar_circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--primary_color);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .avatar_actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .help_text {
+    font-size: 0.8rem;
+    color: var(--text_muted);
+  }
+
+  /* Botones de acción del avatar */
+  .avatar_buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Barra de acciones al pie del formulario (botón Guardar) */
+  .form_actions {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border_color);
+    display: flex;
+    justify-content: flex-end;
+  }

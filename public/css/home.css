@@ -1,0 +1,29 @@
+/* Sección hero de la página de inicio */
+.hero_section {
+    text-align: center;
+    padding: 120px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero_title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text_main);
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    margin-bottom: 24px;
+}
+
+.hero_subtitle {
+    font-size: 1.25rem;
+    color: var(--text_muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.hero_actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}

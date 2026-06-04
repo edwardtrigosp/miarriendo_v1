@@ -1,0 +1,239 @@
+/* ================================================================
+   Wizard de formulario: layout de dos columnas reutilizable
+   Izquierda: formulario (scroll natural de la página)
+   Derecha: panel de progreso fijo (sticky)
+   Usado por: registro de usuario y registro de propiedades.
+   ================================================================ */
+.wizard_layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 48px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    align-items: start;
+}
+
+/* ---- Columna del formulario ---- */
+.wizard_main {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_sm);
+    padding: 40px;
+}
+
+.wizard_header {
+    margin-bottom: 28px;
+}
+.wizard_header .auth_title {
+    text-align: left;
+}
+.wizard_header .auth_subtitle {
+    text-align: left;
+    margin-bottom: 0;
+}
+
+/* Agrupaciones del formulario */
+.form_fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 12px;
+}
+
+.form_legend {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary_color);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border_color);
+    width: 100%;
+}
+
+/* Selects y textareas reutilizan .form_input; aquí sus ajustes propios */
+textarea.form_input {
+    min-height: 96px;
+    resize: vertical;
+}
+select.form_input {
+    cursor: pointer;
+    background-color: var(--surface_color);
+}
+
+/* Fila de 3 columnas (ej. habitaciones / baños / área) */
+.form_row_triple {
+    display: flex;
+    gap: 16px;
+}
+.form_row_triple .form_group {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Fila de checkbox */
+.form_check {
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 8px 0 20px;
+}
+.form_check input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--primary_color);
+    flex-shrink: 0;
+}
+.form_check label {
+    font-size: 0.9rem;
+    color: var(--text_muted);
+    line-height: 1.5;
+}
+
+/* Texto de ayuda bajo un campo */
+.help_hint {
+    font-size: 0.8rem;
+    color: var(--text_muted);
+    margin-top: 6px;
+}
+.help_hint.is_ok    { color: #16a34a; }
+.help_hint.is_error { color: var(--danger_color); }
+
+/* Medidor de fortaleza de contraseña (registro de usuario) */
+.strength_meter {
+    height: 6px;
+    background-color: var(--border_color);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.strength_fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    transition: width 0.25s ease, background-color 0.25s ease;
+}
+.strength_fill.weak   { width: 33%;  background-color: #ef4444; }
+.strength_fill.medium { width: 66%;  background-color: #f59e0b; }
+.strength_fill.strong { width: 100%; background-color: #16a34a; }
+
+/* ---- Panel de progreso (sticky) ---- */
+.progress_panel {
+    position: sticky;
+    top: 100px; /* deja espacio bajo el nav fijo */
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_sm);
+    padding: 28px;
+}
+
+.progress_title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.progress_bar {
+    height: 10px;
+    background-color: var(--bg_color);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.progress_fill {
+    height: 100%;
+    width: 0;
+    background-color: var(--primary_color);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.progress_percent {
+    font-size: 0.85rem;
+    color: var(--text_muted);
+    margin: 10px 0 20px;
+    font-weight: 600;
+}
+
+.progress_list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.progress_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text_muted);
+    transition: color 0.2s ease;
+}
+
+/* Círculo indicador a la izquierda de cada paso */
+.progress_item::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border_color);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.progress_item.complete {
+    color: var(--text_main);
+    font-weight: 500;
+}
+.progress_item.complete::before {
+    content: '✓';
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary_color);
+    border-color: var(--primary_color);
+}
+
+.progress_hint {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border_color);
+    font-size: 0.85rem;
+    color: var(--text_muted);
+    line-height: 1.5;
+}
+.progress_hint.is_ready {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 860px) {
+    .wizard_layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    /* En móvil el panel ya no es fijo y va arriba del formulario */
+    .progress_panel {
+        position: static;
+        order: -1;
+    }
+    .wizard_main {
+        padding: 28px 22px;
+    }
+}
+
+@media (max-width: 540px) {
+    .form_row_triple {
+        flex-direction: column;
+        gap: 0;
+    }
+}

@@ -1,0 +1,116 @@
+.auth_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 100vh menos el alto aproximado del nav + su padding (~180px) */
+    min-height: calc(100vh - 180px);
+    padding: 20px 0;
+  }
+  
+  .auth_card {
+    background-color: var(--surface_color);
+    padding: 40px;
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_md);
+    border: 1px solid var(--border_color);
+    width: 100%;
+    min-width: 0; /* respeta max-width aunque sea item flex del wrapper */
+    max-width: 440px;
+  }
+  
+  .auth_title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  
+  .auth_subtitle {
+    color: var(--text_muted);
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  /* Campos de Formulario Reactivos */
+  .form_group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .form_label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text_main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .form_input {
+    width: 100%;
+    min-width: 0; /* permite que el input se encoja dentro de un contenedor flex */
+    padding: 12px 16px;
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text_main);
+    background-color: var(--surface_color);
+    transition: all 0.2s ease;
+  }
+
+  .form_input:focus {
+    outline: none;
+    border-color: var(--primary_color);
+    box-shadow: 0 0 0 3px rgba(137, 23, 212, 0.15);
+  }
+
+  .form_row_double {
+    display: flex;
+    gap: 16px;
+  }
+
+  .form_row_double .form_group {
+    flex: 1;
+    min-width: 0; /* evita el desbordamiento de los campos en fila */
+  }
+
+  /* El campo crece más que su pareja (ej. email junto a teléfono) */
+  .form_group_grow {
+    flex: 1.5;
+  }
+
+  /* Aclaración pequeña dentro de una etiqueta (ej. "(Opcional)") */
+  .label_hint {
+    color: var(--text_muted);
+    font-size: 0.75rem;
+    text-transform: none;
+  }
+
+  /* Variante de tarjeta de auth más ancha (publicar propiedad) */
+  .auth_card_wide {
+    max-width: 600px;
+  }
+  
+  .auth_footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.9rem;
+    color: var(--text_muted);
+  }
+  /* .text_link se define globalmente en global.css */
+
+  /* Responsive: en móvil los campos dobles se apilan en una sola columna */
+  @media (max-width: 540px) {
+    .form_row_double {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .auth_card {
+      padding: 28px 24px;
+    }
+  }
