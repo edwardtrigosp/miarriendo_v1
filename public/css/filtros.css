@@ -1,0 +1,123 @@
+/* ================================================================
+   Barra de filtros de /arriendos
+   ================================================================ */
+.filtros {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_sm, 0 1px 3px rgba(0, 0, 0, 0.06));
+    padding: 20px;
+    margin-top: 8px;
+}
+
+.filtros_grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1.2fr;
+    gap: 12px;
+}
+
+.filtro_campo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border_color);
+    border-radius: 8px;
+    padding: 0 12px;
+    background-color: #fff;
+}
+.filtro_campo .material-symbols-outlined {
+    color: var(--text_muted);
+}
+.filtro_campo input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 0.95rem;
+    background: transparent;
+}
+
+.filtro_select,
+.filtro_input {
+    border: 1px solid var(--border_color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    background-color: #fff;
+    color: var(--text_main);
+    width: 100%;
+}
+.filtro_select:focus,
+.filtro_input:focus,
+.filtro_campo:focus-within {
+    border-color: var(--primary_color);
+    outline: none;
+}
+
+.filtros_acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.filtros_acciones_der {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.filtros_limpiar {
+    color: var(--text_muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+.filtros_limpiar:hover {
+    color: var(--primary_color);
+}
+.filtros_estado {
+    margin: 10px 0 0;
+    font-size: 0.875rem;
+    color: var(--text_muted);
+    min-height: 1.2em;
+}
+
+#btn_cerca {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Distancia en la tarjeta de propiedad (orden por cercanía) */
+.property_distancia {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary_color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+    .filtros_grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .filtro_busqueda {
+        grid-column: 1 / -1;
+    }
+}
+@media (max-width: 520px) {
+    .filtros_grid {
+        grid-template-columns: 1fr;
+    }
+    .filtros_acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filtros_acciones_der {
+        justify-content: space-between;
+    }
+}

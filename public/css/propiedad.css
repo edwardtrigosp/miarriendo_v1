@@ -69,6 +69,14 @@
     line-height: 1.7;
 }
 
+.detalle_mapa {
+    height: 280px;
+    margin-top: 16px;
+    border-radius: var(--border_radius);
+    border: 1px solid var(--border_color);
+    z-index: 0;
+}
+
 .detalle_caracteristicas {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));

@@ -3,6 +3,15 @@ $title  = ($propiedad['titulo'] ?? 'Propiedad') . ' | miarriendo.online';
 $styles = ['propiedad.css'];
 require __DIR__ . '/layouts/header.php';
 
+$tieneCoords = isset($propiedad['latitud'], $propiedad['longitud'])
+    && $propiedad['latitud'] !== null && $propiedad['longitud'] !== null;
+?>
+<?php if ($tieneCoords): ?>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<?php endif; ?>
+<?php
+
 $imagenes = $imagenes ?? [];
 $placeholder = 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=900&q=80';
 $principal = !empty($imagenes) ? $imagenes[0]['url_imagen'] : $placeholder;
@@ -64,6 +73,9 @@ $ubicacion = $direccion
                     <?php if (!empty($propiedad['referencia'])): ?>
                         <p class="u_text_muted">Referencia: <?= e($propiedad['referencia']) ?></p>
                     <?php endif; ?>
+                    <?php if ($tieneCoords): ?>
+                        <div id="detalle_mapa" class="detalle_mapa"></div>
+                    <?php endif; ?>
                 </section>
             </div>
 
@@ -98,5 +110,16 @@ $ubicacion = $direccion
 <?php
 $showFooter = false;
 ?>
+    <?php if ($tieneCoords): ?>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        window.PROP_COORDS = {
+            lat: <?= json_encode((float) $propiedad['latitud']) ?>,
+            lon: <?= json_encode((float) $propiedad['longitud']) ?>,
+            titulo: <?= json_encode($propiedad['titulo'], JSON_UNESCAPED_UNICODE) ?>
+        };
+    </script>
+    <?php endif; ?>
     <script src="/js/propiedad.js"></script>
 <?php require __DIR__ . '/layouts/footer.php'; ?>

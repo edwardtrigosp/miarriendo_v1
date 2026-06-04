@@ -5,15 +5,29 @@
  */
 class PropiedadController
 {
-    /** Listado de arriendos disponibles (desde la base de datos). */
+    /** Listado de arriendos disponibles, con filtros y orden opcionales. */
     public function index(): void
     {
-        $filas = Propiedad::listarDisponibles();
+        $filtros = [
+            'q'               => trim($_GET['q'] ?? ''),
+            'departamento_id' => $_GET['departamento_id'] ?? '',
+            'ciudad_id'       => $_GET['ciudad_id'] ?? '',
+            'tipo'            => $_GET['tipo'] ?? '',
+            'precio_min'      => $_GET['precio_min'] ?? '',
+            'precio_max'      => $_GET['precio_max'] ?? '',
+            'orden'           => $_GET['orden'] ?? 'recientes',
+            'lat'             => $_GET['lat'] ?? null,
+            'lon'             => $_GET['lon'] ?? null,
+        ];
+
+        $filas = Propiedad::listarDisponibles($filtros);
         $propiedades = array_map([Propiedad::class, 'formatearParaTarjeta'], $filas);
 
         view('arriendos', [
             'title'       => 'Explorar Arriendos | miarriendo.online',
             'propiedades' => $propiedades,
+            'filtros'     => $filtros,
+            'ubicaciones' => Ubicacion::paraFormulario(),
         ]);
     }
 

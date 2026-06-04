@@ -13,6 +13,9 @@
         <div class="property_price">$<?= number_format((float) $p['precio'], 0, ',', '.') ?> / mes</div>
         <h3 class="property_title"><?= e($p['titulo']) ?></h3>
         <div class="property_location"><span class="material-symbols-outlined icon_sm">location_on</span> <?= e($p['direccion']) ?></div>
+        <?php if (!empty($p['distancia'])): ?>
+            <div class="property_distancia"><span class="material-symbols-outlined icon_sm">near_me</span> A <?= e($p['distancia']) ?> de ti</div>
+        <?php endif; ?>
         <div class="property_footer">
             <a href="/propiedad/<?= e($p['id']) ?>" class="btn_primary u_full_width">Ver propiedad</a>
         </div>
