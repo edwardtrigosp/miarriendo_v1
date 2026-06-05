@@ -6,7 +6,7 @@ require __DIR__ . '/layouts/header.php';
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
-    <div class="wizard_layout">
+    <div class="wizard_layout wizard_app">
 
         <!-- Columna izquierda: formulario (con scroll si es necesario) -->
         <section class="wizard_main" aria-labelledby="propiedad_titulo">

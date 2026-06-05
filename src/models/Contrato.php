@@ -121,7 +121,8 @@ class Contrato
     /** Solicitudes/contratos recibidos por un propietario (todas las propiedades). */
     public static function listarPorPropietario(int $propietarioId): array
     {
-        $sql = "SELECT c.contrato_id, c.estado, c.monto_mensual, c.fecha_inicio, c.fecha_fin,
+        $sql = "SELECT c.contrato_id, c.estado, c.monto_mensual, c.fecha_inicio, c.fecha_fin, c.created_at,
+                       a.propiedad_id,
                        p.titulo AS propiedad_titulo,
                        inq.nombre AS inquilino_nombre, inq.apellidos AS inquilino_apellidos
                 FROM contratos c
@@ -138,7 +139,7 @@ class Contrato
     /** Contratos/solicitudes hechos por un inquilino. */
     public static function listarPorInquilino(int $inquilinoId): array
     {
-        $sql = "SELECT c.contrato_id, c.estado, c.monto_mensual, c.fecha_inicio, c.fecha_fin,
+        $sql = "SELECT c.contrato_id, c.estado, c.monto_mensual, c.fecha_inicio, c.fecha_fin, c.created_at,
                        p.titulo AS propiedad_titulo,
                        pr.nombre AS propietario_nombre, pr.apellidos AS propietario_apellidos
                 FROM contratos c

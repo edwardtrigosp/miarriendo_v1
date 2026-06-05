@@ -84,6 +84,7 @@ CREATE TABLE usuarios (
     email             VARCHAR(255) NOT NULL UNIQUE,
     contrasena        VARCHAR(256) NOT NULL,        -- hash con password_hash()
     telefono          VARCHAR(20),
+    foto_url          VARCHAR(255),                 -- ruta de la foto de perfil (opcional)
     rol               ENUM('usuario','admin') NOT NULL DEFAULT 'usuario', -- permisos (blog/admin)
     email_verificado  TINYINT(1)   NOT NULL DEFAULT 0,
     activo            TINYINT(1)   NOT NULL DEFAULT 1,

@@ -175,3 +175,41 @@ if (!function_exists('env')) {
         return $envCache[$clave] ?? $defecto;
     }
 }
+
+if (!function_exists('fecha_corta')) {
+    /**
+     * Fecha corta en español: "10 jun" o "10 may 2027" (con $conAnio).
+     * Recibe un timestamp o una cadena de fecha.
+     */
+    function fecha_corta($fecha, bool $conAnio = false): string
+    {
+        $ts = is_numeric($fecha) ? (int) $fecha : strtotime((string) $fecha);
+        if ($ts === false) {
+            return '';
+        }
+        $meses = ['', 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        $txt = (int) date('j', $ts) . ' ' . $meses[(int) date('n', $ts)];
+        return $conAnio ? $txt . ' ' . date('Y', $ts) : $txt;
+    }
+}
+
+if (!function_exists('tiempo_hace')) {
+    /**
+     * Devuelve un texto relativo amigable: "hace un momento", "hace 3 horas",
+     * "hace 5 días"... a partir de una fecha (string datetime o timestamp).
+     */
+    function tiempo_hace(string $fecha): string
+    {
+        $ts = is_numeric($fecha) ? (int) $fecha : strtotime($fecha);
+        if ($ts === false) {
+            return '';
+        }
+        $seg = time() - $ts;
+        if ($seg < 60)       return 'hace un momento';
+        if ($seg < 3600)     return 'hace ' . (int) ($seg / 60) . ' min';
+        if ($seg < 86400)    return 'hace ' . (int) ($seg / 3600) . ' h';
+        if ($seg < 2592000)  return 'hace ' . (int) ($seg / 86400) . ' días';
+        if ($seg < 31536000) return 'hace ' . (int) ($seg / 2592000) . ' meses';
+        return 'hace ' . (int) ($seg / 31536000) . ' años';
+    }
+}

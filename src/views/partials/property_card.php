@@ -7,6 +7,12 @@
 <article class="property_card">
     <div class="property_image_container">
         <span class="property_badge"><?= e($p['estado'] ?? 'Disponible') ?></span>
+        <?php if (!empty($p['solicitudes'])): ?>
+            <span class="property_badge_solicitudes" title="Solicitudes por firmar">
+                <span class="material-symbols-outlined icon_sm">draw</span>
+                <?= (int) $p['solicitudes'] ?> solicitud<?= $p['solicitudes'] > 1 ? 'es' : '' ?>
+            </span>
+        <?php endif; ?>
         <img src="<?= e($p['imagen']) ?>" alt="<?= e($p['titulo']) ?>">
     </div>
     <div class="property_content">
@@ -18,6 +24,12 @@
         <?php endif; ?>
         <div class="property_footer">
             <a href="/propiedad/<?= e($p['id']) ?>" class="btn_primary u_full_width">Ver propiedad</a>
+            <?php if (!empty($p['solicitudes'])): ?>
+                <a href="/panel?ver=solicitudes-recibidas" class="property_solicitudes_link">
+                    <span class="material-symbols-outlined icon_sm">draw</span>
+                    Firmar <?= (int) $p['solicitudes'] ?> contrato<?= $p['solicitudes'] > 1 ? 's' : '' ?>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 </article>

@@ -465,3 +465,24 @@ select.form_input {
 }
 .foto_eliminar:hover { background-color: #b91c1c; }
 .fotos_add .upload_zone { margin-top: 4px; }
+
+/* ================================================================
+   Publicar propiedad: panel lateral con las MEDIDAS ESTÁNDAR
+   (mismo ancho/sticky/estilo que las vistas del panel). Scopeado
+   con .wizard_app para no afectar el registro de usuario.
+   ================================================================ */
+.wizard_app {
+    grid-template-columns: 1fr 320px; /* estándar (antes 340px) */
+    gap: 28px;                        /* estándar (antes 48px) */
+    max-width: 1200px;                /* igual que main_container */
+    padding-top: 40px;                /* = panel_wrap, para alinear el sticky */
+}
+.wizard_app .progress_panel {
+    top: 110px;          /* = topbar (70px) + 40px: fijo sin moverse */
+    padding: 24px;       /* estándar */
+    border-radius: 14px; /* estándar */
+}
+@media (max-width: 980px) {
+    .wizard_app { grid-template-columns: 1fr; gap: 24px; }
+    .wizard_app .progress_panel { position: static; order: -1; }
+}

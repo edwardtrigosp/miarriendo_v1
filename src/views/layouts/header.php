@@ -23,9 +23,16 @@ $styles = $styles ?? [];
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
 
-    <link rel="stylesheet" href="/css/global.css">
+<?php
+    // Cache-busting: añade ?v=<fecha de modificación> para forzar recarga al editar CSS.
+    $cssVer = static function (string $archivo): string {
+        $ruta = BASE_PATH . '/public/css/' . $archivo;
+        return is_file($ruta) ? '?v=' . filemtime($ruta) : '';
+    };
+?>
+    <link rel="stylesheet" href="/css/global.css<?= $cssVer('global.css') ?>">
     <?php foreach ($styles as $css): ?>
-    <link rel="stylesheet" href="/css/<?= e($css) ?>">
+    <link rel="stylesheet" href="/css/<?= e($css) ?><?= $cssVer($css) ?>">
     <?php endforeach; ?>
 </head>
 <body>
@@ -38,6 +45,7 @@ $appShell = empty($hideNav) && $autenticado;
     <div class="app_shell">
         <?php require __DIR__ . '/app_sidebar.php'; ?>
         <div class="app_main">
+            <?php require __DIR__ . '/app_topbar.php'; ?>
 <?php elseif (empty($hideNav)): ?>
     <?php require __DIR__ . '/nav.php'; ?>
 <?php endif; ?>

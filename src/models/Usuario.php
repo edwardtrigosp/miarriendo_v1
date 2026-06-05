@@ -67,6 +67,15 @@ class Usuario
         ]);
     }
 
+    /** Actualiza la ruta de la foto de perfil (o null para quitarla). */
+    public static function actualizarFoto(int $id, ?string $url): void
+    {
+        $stmt = Database::conexion()->prepare(
+            "UPDATE usuarios SET foto_url = :url WHERE usuario_id = :id"
+        );
+        $stmt->execute([':url' => $url, ':id' => $id]);
+    }
+
     /** ¿El correo lo usa OTRO usuario distinto de $excluyeId? */
     public static function emailEnUsoPorOtro(string $email, int $excluyeId): bool
     {

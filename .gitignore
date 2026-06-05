@@ -1,5 +1,10 @@
 .env
 
+# Configuración local de herramientas (agente/IDE), no versionar
+/.claude/
+
 # Imágenes subidas por usuarios (no versionar; conservar la carpeta)
 /public/uploads/propiedades/*
 !/public/uploads/propiedades/.gitkeep
+/public/uploads/usuarios/*
+!/public/uploads/usuarios/.htaccess

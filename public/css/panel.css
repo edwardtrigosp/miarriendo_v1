@@ -95,6 +95,10 @@
     color: var(--text_main);
     transition: border-color 0.2s ease, transform 0.1s ease;
 }
+.stat_card:hover {
+    border-color: var(--primary_color);
+    transform: translateY(-2px);
+}
 .stat_icon {
     width: 48px;
     height: 48px;
@@ -243,4 +247,286 @@
     .solicitud_row {
         flex-wrap: wrap;
     }
+}
+
+/* ================================================================
+   Vista con panel lateral contextual (ej. Mis propiedades)
+   Columna de contenido + tarjeta lateral fija (sticky)
+   ================================================================ */
+.view_layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 28px;
+    align-items: start;
+}
+.view_main { min-width: 0; }
+
+.side_card {
+    position: sticky;
+    top: 110px; /* = topbar (70px) + padding-top del panel (40px): se fija sin moverse */
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 14px;
+    box-shadow: var(--shadow_sm);
+    padding: 24px;
+}
+.side_card h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 18px; }
+
+.side_progress_bar {
+    height: 10px;
+    background-color: var(--bg_color);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.side_progress_fill {
+    height: 100%;
+    background-color: var(--primary_color);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+.side_progress_label {
+    font-size: 0.82rem;
+    color: var(--text_muted);
+    font-weight: 600;
+    margin: 10px 0 20px;
+}
+
+.side_stats { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.side_stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text_main);
+}
+.side_stat .material-symbols-outlined {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background-color: var(--accent_color);
+    color: var(--primary_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.side_stat strong { margin-left: auto; font-size: 1.05rem; }
+.side_money { color: var(--primary_color); }
+
+.side_hint {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border_color);
+    font-size: 0.85rem;
+    color: var(--text_muted);
+    line-height: 1.5;
+}
+.side_hint a { color: var(--primary_color); font-weight: 600; text-decoration: none; }
+.side_hint a:hover { text-decoration: underline; }
+.side_card_btn { display: block; text-align: center; margin-top: 14px; }
+
+/* Checklist del panel lateral (ej. completitud del perfil) */
+.side_checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.side_checklist li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text_muted);
+}
+.side_checklist li .material-symbols-outlined { font-size: 22px; color: var(--border_color); }
+.side_checklist li.is_done { color: var(--text_main); }
+.side_checklist li.is_done .material-symbols-outlined { color: var(--primary_color); }
+
+/* Stepper vertical del panel lateral (ej. pasos de la firma) */
+.side_steps { list-style: none; display: flex; flex-direction: column; gap: 0; counter-reset: paso; }
+.side_step { position: relative; display: flex; gap: 12px; padding-bottom: 18px; }
+.side_step:last-child { padding-bottom: 0; }
+.side_step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 28px;
+    bottom: -2px;
+    width: 2px;
+    background-color: var(--border_color);
+}
+.side_step_num {
+    counter-increment: paso;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--accent_color);
+    color: var(--primary_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.side_step_num::before { content: counter(paso); }
+.side_step_body strong { display: block; font-size: 0.9rem; color: var(--text_main); }
+.side_step_body span { font-size: 0.8rem; color: var(--text_muted); }
+
+@media (max-width: 980px) {
+    .view_layout { grid-template-columns: 1fr; }
+    .side_card { position: static; order: -1; }
+}
+
+/* ================================================================
+   Dashboard de inicio (Opción 2): KPIs + atención + actividad
+   ================================================================ */
+
+/* Fila de KPIs */
+.kpi_row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.kpi_card {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 14px;
+    box-shadow: var(--shadow_sm);
+    padding: 20px;
+    text-decoration: none;
+    color: var(--text_main);
+    transition: border-color 0.2s ease, transform 0.1s ease;
+}
+a.kpi_card:hover {
+    border-color: var(--primary_color);
+    transform: translateY(-2px);
+}
+.kpi_card > .material-symbols-outlined {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--accent_color);
+    color: var(--primary_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.kpi_card strong {
+    font-size: 1.7rem;
+    display: block;
+    line-height: 1.1;
+}
+.kpi_card span {
+    font-size: 0.82rem;
+    color: var(--text_muted);
+}
+.kpi_card.is_money strong { color: var(--primary_color); }
+.kpi_badge {
+    display: inline-block;
+    background-color: var(--danger_color);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* Split: atención + actividad */
+.dash_split {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+.dash_panel {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 14px;
+    box-shadow: var(--shadow_sm);
+    padding: 20px 22px;
+}
+.dash_panel h2 {
+    font-size: 1.05rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dash_empty {
+    text-align: center;
+    color: var(--text_muted);
+    padding: 24px 8px;
+}
+.dash_empty .material-symbols-outlined {
+    font-size: 32px;
+    color: var(--purple_300);
+    margin-bottom: 6px;
+}
+.dash_empty p { font-size: 0.9rem; }
+
+/* Lista de solicitudes que requieren atención */
+.req_row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border_color);
+}
+.req_row:last-child { border-bottom: none; }
+.req_avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--primary_color);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+.req_info { flex: 1; min-width: 0; }
+.req_info strong {
+    display: block;
+    font-size: 0.92rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.req_info span { font-size: 0.8rem; color: var(--text_muted); }
+
+/* Timeline de actividad reciente */
+.act_item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+}
+.act_item > .material-symbols-outlined {
+    color: var(--primary_color);
+    font-size: 22px;
+    flex-shrink: 0;
+}
+.act_item p { font-size: 0.9rem; }
+.act_item time { font-size: 0.76rem; color: var(--text_muted); }
+
+/* Acciones rápidas */
+.dash_quick { display: flex; gap: 12px; flex-wrap: wrap; }
+.dash_quick .btn_primary,
+.dash_quick .btn_outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.dash_quick .material-symbols-outlined { font-size: 20px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .kpi_row { grid-template-columns: repeat(2, 1fr); }
+    .dash_split { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+    .kpi_row { grid-template-columns: 1fr; }
 }

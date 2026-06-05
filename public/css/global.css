@@ -8,6 +8,18 @@
   --primary_hover: #7412B5;   /* Variante más oscura para hover */
   --accent_color:  #F4E7FF;   /* Morado muy claro para fondos sutiles (badges/estados) */
 
+  /* Paleta de morados derivada del color principal (#8917D4) */
+  --purple_50:  #F4ECFC;      /* casi blanco con tinte morado */
+  --purple_100: #EDDCF9;      /* morado muy suave (hover de menús) */
+  --purple_200: #DBB9F2;
+  --purple_300: #C48BE9;
+  --purple_400: #AC5DE1;
+  --purple_500: #8917D4;      /* = primary */
+  --purple_600: #7414B4;
+  --purple_700: #601094;
+  --purple_800: #4B0D75;
+  --purple_900: #360954;
+
   /* Fondos y superficies (tema claro) */
   --bg_color:      #F5F5F5;   /* Fondo general de la página */
   --surface_color: #FFFFFF;   /* Fondo de tarjetas, nav y superficies elevadas */
@@ -58,6 +70,12 @@
 .icon_sm { font-size: 1rem; }
 .icon_lg { font-size: 1.5rem; }
 .icon_xl { font-size: 2rem; }
+
+html {
+    /* Reserva siempre el espacio de la barra de scroll: todas las vistas
+       conservan el mismo ancho aunque una tenga scroll y otra no. */
+    scrollbar-gutter: stable;
+}
 
 body {
     font-family: var(--font_family);
@@ -419,7 +437,7 @@ body {
 .app_nav {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 10px;
 }
 .app_nav_top { margin-top: 8px; }
 .app_nav_bottom {
@@ -427,11 +445,21 @@ body {
     padding-top: 8px;
     border-top: 1px solid var(--border_color);
 }
+/* Encabezado de grupo dentro del menú (rol del usuario) */
+.app_nav_section_label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text_muted);
+    padding: 0 12px;
+    margin: 14px 0 2px;
+}
 .app_nav_link {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 11px 12px;
+    padding: 8px 12px;
     border-radius: 10px;
     color: var(--text_muted);
     text-decoration: none;
@@ -447,8 +475,8 @@ body {
 }
 .app_nav_link .material-symbols-outlined { font-size: 22px; }
 .app_nav_link:hover {
-    background-color: var(--bg_color);
-    color: var(--text_main);
+    background-color: var(--purple_100); /* fondo morado suave, igual que el avatar */
+    color: var(--primary_color);        /* el texto también pasa a morado */
 }
 .app_nav_link.is_active {
     background-color: var(--surface_color); /* tarjeta blanca "flotando" sobre el fondo */
@@ -463,6 +491,108 @@ body {
     flex: 1;
     min-width: 0;
 }
+
+/* ---- Barra superior con avatar (esquina superior derecha) ---- */
+.app_topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: var(--bg_color); /* mismo fondo: el contenido pasa por debajo sin corte */
+}
+
+.user_menu { position: relative; }
+
+.user_menu_trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px 4px 4px;
+    background: none;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.15s ease;
+}
+.user_menu_trigger:hover { background-color: var(--purple_100); }
+.user_menu_caret {
+    font-size: 20px;
+    color: var(--text_muted);
+    transition: transform 0.2s ease;
+}
+.user_menu_trigger[aria-expanded="true"] .user_menu_caret { transform: rotate(180deg); }
+
+.user_avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--primary_color);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.user_avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Menú desplegable */
+.user_menu_dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 240px;
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 8px;
+    z-index: 50;
+}
+.user_menu_dropdown[hidden] { display: none; }
+
+.user_menu_greeting {
+    padding: 8px 12px;
+    font-weight: 600;
+    color: var(--text_main);
+}
+
+.user_menu_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--text_main);
+    font-size: 0.95rem;
+    font-family: inherit;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease;
+}
+.user_menu_item .material-symbols-outlined { font-size: 20px; }
+.user_menu_item:hover { background-color: var(--purple_100); color: var(--primary_color); }
+
+.user_menu_sep {
+    height: 1px;
+    background-color: var(--border_color);
+    margin: 8px 4px;
+}
+
+.user_menu_logout_form { margin: 0; }
+.user_menu_logout { color: var(--danger_color); }
+.user_menu_logout:hover { background-color: #FEECEC; color: var(--danger_color); }
 
 /* Responsive: el menú lateral pasa a barra superior */
 @media (max-width: 860px) {
