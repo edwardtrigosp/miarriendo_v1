@@ -29,6 +29,7 @@ class PanelController
             'arriendos'            => $arriendos,
             'solicitudesRecibidas' => $solicitudesRecibidas,
             'solicitudesEnviadas'  => $solicitudesEnviadas,
+            'exito'                => flash('panel_ok'),
         ]);
     }
 }

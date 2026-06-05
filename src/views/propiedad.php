@@ -32,6 +32,9 @@ $ubicacion = $direccion
 
     <main class="main_container">
         <a href="/arriendos" class="detalle_back"><span class="material-symbols-outlined icon_sm">arrow_back</span> Volver a arriendos</a>
+        <?php if (!empty($exito)): ?>
+            <p class="form_success" role="status"><?= e($exito) ?></p>
+        <?php endif; ?>
 
         <div class="detalle_layout">
 
@@ -125,6 +128,11 @@ $ubicacion = $direccion
                     ?>
                     <?php if ($esDueno): ?>
                         <p class="detalle_nota_dueno"><span class="material-symbols-outlined icon_sm">verified_user</span> Esta es tu propiedad.</p>
+                        <a href="/propiedad/<?= e($propiedad['propiedad_id']) ?>/editar" class="btn_primary u_full_width">Editar propiedad</a>
+                        <form action="/propiedad/<?= e($propiedad['propiedad_id']) ?>/eliminar" method="POST" class="u_mt_sm" onsubmit="return confirm('¿Eliminar esta propiedad? Dejará de aparecer en la plataforma.');">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="btn_outline btn_danger u_full_width">Eliminar propiedad</button>
+                        </form>
                     <?php elseif ($usuarioId === null): ?>
                         <a href="/login" class="btn_primary u_full_width">Inicia sesión para solicitar</a>
                     <?php else: ?>

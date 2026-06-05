@@ -239,7 +239,7 @@ class PropiedadController
     {
         $propiedad = Propiedad::buscarPorId((int) $id);
 
-        if ($propiedad === null) {
+        if ($propiedad === null || (int) $propiedad['archivada'] === 1) {
             http_response_code(404);
             view('404', ['title' => 'Propiedad no encontrada | 404']);
             return;
@@ -265,7 +265,133 @@ class PropiedadController
             'propiedad' => $propiedad,
             'imagenes'  => ImagenPropiedad::porPropiedad((int) $id),
             'clausulas' => $clausulas,
+            'exito'     => flash('propiedad_ok'),
         ]);
+    }
+
+    /** Formulario de edición de una propiedad (solo el dueño). */
+    public function editar(string $id): void
+    {
+        $propiedad = $this->soloDueno((int) $id);
+        if ($propiedad === null) {
+            return;
+        }
+        view('editar_propiedad', [
+            'title'     => 'Editar propiedad | miarriendo.online',
+            'propiedad' => $propiedad,
+        ]);
+    }
+
+    /** Procesa la edición de una propiedad. */
+    public function actualizar(string $id): void
+    {
+        $propiedad = $this->soloDueno((int) $id);
+        if ($propiedad === null) {
+            return;
+        }
+
+        $titulo = trim($_POST['titulo'] ?? '');
+        $tipo   = trim($_POST['tipo_propiedad'] ?? '');
+        $precio = $_POST['precio_alquiler_mensual'] ?? '';
+        $calle  = trim($_POST['calle'] ?? '');
+
+        $error = null;
+        if ($titulo === '' || $tipo === '' || $precio === '' || $calle === '') {
+            $error = 'Completa los campos obligatorios (título, tipo, precio y dirección).';
+        } elseif (!is_numeric($precio) || (float) $precio <= 0) {
+            $error = 'El precio mensual debe ser un número mayor a 0.';
+        }
+
+        if ($error !== null) {
+            view('editar_propiedad', [
+                'title'     => 'Editar propiedad | miarriendo.online',
+                'propiedad' => array_merge($propiedad, $_POST),
+                'error'     => $error,
+            ]);
+            return;
+        }
+
+        $numEntero = static fn($v) => ($v ?? '') !== '' ? (int) $v : null;
+        $numFloat  = static fn($v) => ($v ?? '') !== '' ? (float) $v : null;
+        $barrio = trim($_POST['barrio'] ?? '') ?: null;
+        $numExt = trim($_POST['numero_exterior'] ?? '') ?: null;
+
+        // Re-geocodifica con la ciudad actual (la dirección pudo cambiar)
+        $coords = self::geocodificarDireccion((int) $propiedad['ciudad_id'], $calle, $numExt, $barrio);
+
+        $pdo = Database::conexion();
+        $pdo->beginTransaction();
+        try {
+            Direccion::actualizar((int) $propiedad['direccion_id'], [
+                'calle'           => $calle,
+                'numero_exterior' => $numExt,
+                'barrio'          => $barrio,
+                'codigo_postal'   => trim($_POST['codigo_postal'] ?? '') ?: null,
+                'referencia'      => trim($_POST['referencia'] ?? '') ?: null,
+                'latitud'         => $coords['lat'] ?? $propiedad['latitud'],
+                'longitud'        => $coords['lon'] ?? $propiedad['longitud'],
+            ]);
+            Propiedad::actualizar((int) $id, [
+                'titulo'                  => $titulo,
+                'descripcion'             => trim($_POST['descripcion'] ?? '') ?: null,
+                'tipo_propiedad'          => $tipo,
+                'num_habitaciones'        => $numEntero($_POST['num_habitaciones'] ?? ''),
+                'num_banos'               => $numEntero($_POST['num_banos'] ?? ''),
+                'area_m2'                 => $numFloat($_POST['area_m2'] ?? ''),
+                'precio_alquiler_mensual' => (float) $precio,
+                'deposito'                => $numFloat($_POST['deposito'] ?? ''),
+                'disponible'              => isset($_POST['disponible']) ? 1 : 0,
+                'amueblado'               => isset($_POST['amueblado']) ? 1 : 0,
+                'mascotas_permitidas'     => isset($_POST['mascotas_permitidas']) ? 1 : 0,
+                'clausulas_contrato'      => trim($_POST['clausulas_contrato'] ?? '') ?: null,
+            ]);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            view('editar_propiedad', [
+                'title'     => 'Editar propiedad | miarriendo.online',
+                'propiedad' => array_merge($propiedad, $_POST),
+                'error'     => 'No se pudieron guardar los cambios. Intenta de nuevo.',
+            ]);
+            return;
+        }
+
+        flash('propiedad_ok', 'Los cambios se guardaron correctamente.');
+        redirect('/propiedad/' . (int) $id);
+    }
+
+    /** Archiva (borrado lógico) una propiedad del dueño. */
+    public function eliminar(string $id): void
+    {
+        $propiedad = $this->soloDueno((int) $id);
+        if ($propiedad === null) {
+            return;
+        }
+        Propiedad::archivar((int) $id);
+        flash('panel_ok', 'La propiedad "' . $propiedad['titulo'] . '" fue eliminada.');
+        redirect('/panel');
+    }
+
+    /**
+     * Carga la propiedad y verifica que el usuario en sesión sea su dueño.
+     * Devuelve la propiedad (con ciudad_id_actual añadido) o null (403/404 ya respondido).
+     */
+    private function soloDueno(int $id): ?array
+    {
+        requiereLogin();
+        $propiedad = Propiedad::buscarPorId($id);
+
+        if ($propiedad === null || (int) $propiedad['archivada'] === 1) {
+            http_response_code(404);
+            view('404', ['title' => 'Propiedad no encontrada | 404']);
+            return null;
+        }
+        if ((int) $_SESSION['usuario_id'] !== (int) $propiedad['propietario_id']) {
+            http_response_code(403);
+            view('error', ['title' => 'Sin acceso | 403', 'codigo' => '403', 'mensaje' => 'No puedes gestionar esta propiedad.']);
+            return null;
+        }
+        return $propiedad;
     }
 
     /** Formulario para solicitar el arriendo de una propiedad (Fase 2). */

@@ -403,3 +403,13 @@ select.form_input {
 }
 .geo_estado.is_ok  { color: #15803d; }
 .geo_estado.is_err { color: #b91c1c; }
+
+/* Contenedor del formulario de edición (una sola columna) */
+.editar_wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+}
+.editar_wrap .wizard_main {
+    margin-top: 16px;
+}

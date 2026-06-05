@@ -28,6 +28,10 @@ $pendientes = count(array_filter($solicitudesRecibidas, static fn($s) => $s['est
             <p class="u_text_muted">Este es tu panel. Gestiona tus propiedades y tus arriendos.</p>
         </header>
 
+        <?php if (!empty($exito)): ?>
+            <p class="form_success" role="status"><?= e($exito) ?></p>
+        <?php endif; ?>
+
         <!-- Resumen -->
         <div class="panel_stats">
             <div class="stat_card">
