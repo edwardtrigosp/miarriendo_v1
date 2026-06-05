@@ -6,11 +6,12 @@
  *   $showFooter bool  Si es false, no se muestra el footer visual (solo cierra tags).
  */
 ?>
-<?php if (!empty($appShell)): ?>
-        </div><!-- .app_main -->
-    </div><!-- .app_shell -->
-<?php endif; ?>
-<?php if (!isset($showFooter) || $showFooter): ?>
+<?php
+// Footer (se arma una sola vez). En el app shell debe ir DENTRO de .app_main
+// para que el menú lateral fijo (sticky) no se "suelte" al hacer scroll.
+$mostrarFooter = (!isset($showFooter) || $showFooter);
+ob_start();
+?>
 <footer class="footer_main">
     <nav class="footer_links">
         <a href="/arriendos">Arriendos</a>
@@ -19,6 +20,13 @@
     </nav>
     &copy; <?= date('Y') ?> miarriendo.online. Todos los derechos reservados.
 </footer>
+<?php $footerHtml = ob_get_clean(); ?>
+<?php if (!empty($appShell)): ?>
+        <?php if ($mostrarFooter) { echo $footerHtml; } ?>
+        </div><!-- .app_main -->
+    </div><!-- .app_shell -->
+<?php elseif ($mostrarFooter): ?>
+<?= $footerHtml ?>
 <?php endif; ?>
 
 <!-- Banner de consentimiento de cookies (global) -->

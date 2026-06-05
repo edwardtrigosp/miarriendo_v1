@@ -22,8 +22,14 @@ require __DIR__ . '/layouts/header.php';
             <form action="/propiedades" method="POST" id="propiedad_form" enctype="multipart/form-data" novalidate>
                 <?= csrf_field() ?>
 
-                <fieldset class="form_fieldset">
-                    <legend class="form_legend">Información de la propiedad</legend>
+                <div class="form_section">
+                    <div class="form_section_head">
+                        <span class="form_section_icon material-symbols-outlined">description</span>
+                        <div>
+                            <div class="form_section_title">Información</div>
+                            <div class="form_section_sub">Lo básico de tu publicación.</div>
+                        </div>
+                    </div>
                     <div class="form_group">
                         <label for="titulo" class="form_label">Título de la publicación</label>
                         <input type="text" id="titulo" name="titulo" class="form_input" placeholder="Ej: Apto amoblado frente al parque" maxlength="200" required>
@@ -43,12 +49,18 @@ require __DIR__ . '/layouts/header.php';
                         <label for="descripcion" class="form_label">Descripción <span class="label_hint">(Opcional)</span></label>
                         <textarea id="descripcion" name="descripcion" class="form_input" placeholder="Describe la propiedad, su entorno y lo que la hace especial."></textarea>
                     </div>
-                </fieldset>
+                </div>
 
-                <fieldset class="form_fieldset">
-                    <legend class="form_legend">Fotos</legend>
+                <div class="form_section">
+                    <div class="form_section_head">
+                        <span class="form_section_icon material-symbols-outlined">image</span>
+                        <div>
+                            <div class="form_section_title">Fotos</div>
+                            <div class="form_section_sub">La primera será la portada.</div>
+                        </div>
+                    </div>
                     <div class="form_group">
-                        <label class="form_label">Imágenes de la propiedad <span class="label_hint">(la primera será la portada)</span></label>
+                        <label class="form_label">Imágenes de la propiedad</label>
                         <label for="imagenes" class="upload_zone">
                             <span class="material-symbols-outlined icon_lg">add_photo_alternate</span>
                             <span class="upload_text">Haz clic para seleccionar fotos</span>
@@ -57,10 +69,16 @@ require __DIR__ . '/layouts/header.php';
                         </label>
                         <div class="upload_preview" id="upload_preview"></div>
                     </div>
-                </fieldset>
+                </div>
 
-                <fieldset class="form_fieldset">
-                    <legend class="form_legend">Características</legend>
+                <div class="form_section">
+                    <div class="form_section_head">
+                        <span class="form_section_icon material-symbols-outlined">king_bed</span>
+                        <div>
+                            <div class="form_section_title">Características y precio</div>
+                            <div class="form_section_sub">Habitaciones, baños, área y canon.</div>
+                        </div>
+                    </div>
                     <div class="form_row_triple">
                         <div class="form_group">
                             <label for="num_habitaciones" class="form_label">Habitaciones</label>
@@ -75,18 +93,6 @@ require __DIR__ . '/layouts/header.php';
                             <input type="number" id="area_m2" name="area_m2" class="form_input" placeholder="0" min="0" step="0.01">
                         </div>
                     </div>
-                    <div class="form_check">
-                        <input type="checkbox" id="amueblado" name="amueblado" value="1">
-                        <label for="amueblado">La propiedad está amueblada</label>
-                    </div>
-                    <div class="form_check">
-                        <input type="checkbox" id="mascotas_permitidas" name="mascotas_permitidas" value="1">
-                        <label for="mascotas_permitidas">Se permiten mascotas</label>
-                    </div>
-                </fieldset>
-
-                <fieldset class="form_fieldset">
-                    <legend class="form_legend">Precio</legend>
                     <div class="form_row_double">
                         <div class="form_group">
                             <label for="precio_alquiler_mensual" class="form_label">Precio mensual (COP)</label>
@@ -98,13 +104,27 @@ require __DIR__ . '/layouts/header.php';
                         </div>
                     </div>
                     <div class="form_check">
+                        <input type="checkbox" id="amueblado" name="amueblado" value="1">
+                        <label for="amueblado">La propiedad está amueblada</label>
+                    </div>
+                    <div class="form_check">
+                        <input type="checkbox" id="mascotas_permitidas" name="mascotas_permitidas" value="1">
+                        <label for="mascotas_permitidas">Se permiten mascotas</label>
+                    </div>
+                    <div class="form_check">
                         <input type="checkbox" id="disponible" name="disponible" value="1" checked>
                         <label for="disponible">Disponible para arriendo de inmediato</label>
                     </div>
-                </fieldset>
+                </div>
 
-                <fieldset class="form_fieldset">
-                    <legend class="form_legend">Ubicación</legend>
+                <div class="form_section">
+                    <div class="form_section_head">
+                        <span class="form_section_icon material-symbols-outlined">location_on</span>
+                        <div>
+                            <div class="form_section_title">Ubicación</div>
+                            <div class="form_section_sub">Escribe la dirección o usa tu GPS.</div>
+                        </div>
+                    </div>
 
                     <!-- Selector de modo: escribir la dirección o usar el GPS -->
                     <label class="form_label">¿Cómo quieres ubicar tu propiedad?</label>
@@ -184,16 +204,22 @@ require __DIR__ . '/layouts/header.php';
                     <!-- Coordenadas confirmadas (las llena el JS) -->
                     <input type="hidden" name="latitud"  id="latitud">
                     <input type="hidden" name="longitud" id="longitud">
-                </fieldset>
+                </div>
 
-                <fieldset class="form_fieldset">
-                    <legend class="form_legend">Contrato de arrendamiento</legend>
+                <div class="form_section">
+                    <div class="form_section_head">
+                        <span class="form_section_icon material-symbols-outlined">gavel</span>
+                        <div>
+                            <div class="form_section_title">Contrato</div>
+                            <div class="form_section_sub">Cláusulas adicionales para el inquilino (opcional).</div>
+                        </div>
+                    </div>
                     <p class="help_hint">Generaremos un contrato estándar con los datos del inmueble. Aquí puedes añadir <strong>cláusulas adicionales</strong> (reglas del edificio, parqueadero, fecha de pago, etc.). Las verá el inquilino antes de solicitar el arriendo.</p>
                     <div class="form_group">
                         <label for="clausulas_contrato" class="form_label">Cláusulas adicionales <span class="label_hint">(Opcional)</span></label>
                         <textarea id="clausulas_contrato" name="clausulas_contrato" class="form_input" rows="5" maxlength="5000" placeholder="Ej: El canon se paga los primeros 5 días del mes. El inmueble incluye un parqueadero. No se permite subarrendar."></textarea>
                     </div>
-                </fieldset>
+                </div>
 
                 <button type="submit" id="propiedad_submit" class="btn_primary u_full_width" disabled>Publicar ahora</button>
             </form>
@@ -210,11 +236,11 @@ require __DIR__ . '/layouts/header.php';
             <p class="progress_percent"><span id="progress_percent">0</span>% completado</p>
 
             <ul class="progress_list">
-                <li class="progress_item" data-req="titulo">Título de la publicación</li>
-                <li class="progress_item" data-req="tipo_propiedad">Tipo de propiedad</li>
-                <li class="progress_item" data-req="precio_alquiler_mensual">Precio mensual</li>
-                <li class="progress_item" data-req="ciudad">Ciudad</li>
-                <li class="progress_item" data-req="calle">Dirección (calle)</li>
+                <li class="progress_item" data-req="informacion">Información</li>
+                <li class="progress_item" data-req="fotos" data-optional>Fotos <span class="label_hint">(opcional)</span></li>
+                <li class="progress_item" data-req="caracteristicas">Características y precio</li>
+                <li class="progress_item" data-req="ubicacion">Ubicación</li>
+                <li class="progress_item" data-req="contrato" data-optional>Contrato <span class="label_hint">(opcional)</span></li>
             </ul>
 
             <p class="progress_hint" id="progress_hint">Completa los campos obligatorios para publicar.</p>

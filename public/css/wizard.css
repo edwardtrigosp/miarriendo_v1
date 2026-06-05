@@ -486,3 +486,41 @@ select.form_input {
     .wizard_app { grid-template-columns: 1fr; gap: 24px; }
     .wizard_app .progress_panel { position: static; order: -1; }
 }
+
+/* Rediseño: el contenedor del formulario deja de ser una tarjeta gigante;
+   cada sección es su propia tarjeta apilada (icono + título). */
+.wizard_app .wizard_main {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+.wizard_app .wizard_header { margin-bottom: 20px; }
+
+.wizard_app .form_section {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 14px;
+    box-shadow: var(--shadow_sm);
+    padding: 24px 26px;
+    margin-bottom: 18px;
+}
+.wizard_app .form_section_head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.wizard_app .form_section_icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background-color: var(--accent_color);
+    color: var(--primary_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.wizard_app .form_section_title { font-size: 1.05rem; font-weight: 700; }
+.wizard_app .form_section_sub { font-size: 0.82rem; color: var(--text_muted); margin-top: 2px; }

@@ -1,6 +1,6 @@
 <?php
 $title  = 'Blog | miarriendo.online';
-$styles = ['blog.css'];
+$styles = ['blog.css', 'panel.css'];
 require __DIR__ . '/layouts/header.php';
 
 // Publicaciones de ejemplo mientras no haya base de datos.
@@ -34,31 +34,50 @@ $posts = $posts ?? [
 // Nombres de meses en español para formatear las fechas sin depender del locale.
 $meses = [1 => 'ene', 2 => 'feb', 3 => 'mar', 4 => 'abr', 5 => 'may', 6 => 'jun',
           7 => 'jul', 8 => 'ago', 9 => 'sep', 10 => 'oct', 11 => 'nov', 12 => 'dic'];
+
+// Categorías con su conteo, para el panel lateral.
+$categorias = array_count_values(array_map(static fn($p) => $p['categoria'], $posts));
 ?>
 
-    <main class="main_container">
-        <header class="blog_header">
-            <h1 class="page_title">Blog miarriendo</h1>
-            <p class="u_text_muted">Resolvemos tus dudas y te contamos las novedades de la plataforma.</p>
-        </header>
+    <main class="main_container panel_wrap">
+        <div class="view_layout">
+            <!-- Columna izquierda: encabezado + publicaciones -->
+            <div class="view_main">
+                <header class="panel_header">
+                    <h1 class="panel_greeting">Blog miarriendo</h1>
+                    <p class="u_text_muted">Resolvemos tus dudas y te contamos las novedades de la plataforma.</p>
+                </header>
 
-        <div class="blog_grid">
-            <?php foreach ($posts as $post): ?>
-            <article class="post_card">
-                <span class="post_category"><?= e($post['categoria']) ?></span>
-                <h2 class="post_title"><?= e($post['titulo']) ?></h2>
-                <p class="post_excerpt"><?= e($post['extracto']) ?></p>
-                <footer class="post_meta">
-                    <?php
-                    $ts = strtotime($post['fecha']);
-                    $fechaLegible = (int) date('j', $ts) . ' ' . $meses[(int) date('n', $ts)] . ' ' . date('Y', $ts);
-                    ?>
-                    <span><?= e($post['autor']) ?></span>
-                    <time datetime="<?= e($post['fecha']) ?>"><?= e($fechaLegible) ?></time>
-                </footer>
-                <a href="/blog/<?= e($post['id']) ?>" class="post_link">Leer más <span class="material-symbols-outlined icon_sm">arrow_forward</span></a>
-            </article>
-            <?php endforeach; ?>
+                <div class="blog_grid">
+                    <?php foreach ($posts as $post): ?>
+                    <article class="post_card">
+                        <span class="post_category"><?= e($post['categoria']) ?></span>
+                        <h2 class="post_title"><?= e($post['titulo']) ?></h2>
+                        <p class="post_excerpt"><?= e($post['extracto']) ?></p>
+                        <footer class="post_meta">
+                            <?php
+                            $ts = strtotime($post['fecha']);
+                            $fechaLegible = (int) date('j', $ts) . ' ' . $meses[(int) date('n', $ts)] . ' ' . date('Y', $ts);
+                            ?>
+                            <span><?= e($post['autor']) ?></span>
+                            <time datetime="<?= e($post['fecha']) ?>"><?= e($fechaLegible) ?></time>
+                        </footer>
+                        <a href="/blog/<?= e($post['id']) ?>" class="post_link">Leer más <span class="material-symbols-outlined icon_sm">arrow_forward</span></a>
+                    </article>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Columna derecha: categorías -->
+            <aside class="side_card">
+                <h2>Categorías</h2>
+                <ul class="side_stats">
+                    <?php foreach ($categorias as $nombre => $n): ?>
+                        <li class="side_stat"><span class="material-symbols-outlined">label</span> <?= e($nombre) ?> <strong><?= (int) $n ?></strong></li>
+                    <?php endforeach; ?>
+                </ul>
+                <p class="side_hint">¿Tienes una propiedad? Publícala y llega a más inquilinos. <a href="/propiedades">Publicar →</a></p>
+            </aside>
         </div>
     </main>
 

@@ -325,6 +325,27 @@
 .side_hint a:hover { text-decoration: underline; }
 .side_card_btn { display: block; text-align: center; margin-top: 14px; }
 
+/* Columna izquierda de Inicio: paneles apilados */
+.dash_stack { display: flex; flex-direction: column; gap: 20px; }
+
+/* Acciones rápidas dentro del panel lateral (Inicio) */
+.side_actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border_color);
+}
+.side_actions .btn_primary,
+.side_actions .btn_outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.side_actions .material-symbols-outlined { font-size: 20px; }
+
 /* Checklist del panel lateral (ej. completitud del perfil) */
 .side_checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .side_checklist li {
