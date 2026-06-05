@@ -24,7 +24,7 @@ class PropiedadController
         $propiedades = array_map([Propiedad::class, 'formatearParaTarjeta'], $filas);
 
         view('arriendos', [
-            'title'       => 'Explorar Arriendos | miarriendo.online',
+            'title'       => 'Arriendos | miarriendo.online',
             'propiedades' => $propiedades,
             'filtros'     => $filtros,
             'ubicaciones' => Ubicacion::paraFormulario(),
@@ -78,9 +78,11 @@ class PropiedadController
         $barrio  = trim($_POST['barrio'] ?? '') ?: null;
         $numExt  = trim($_POST['numero_exterior'] ?? '') ?: null;
 
-        // Geocodifica la dirección (fuera de la transacción: es una llamada de red).
-        // Si falla, las coordenadas quedan en null y la publicación continúa igual.
-        $coords = self::geocodificarDireccion($ciudadId, $calle, $numExt, $barrio);
+        // 1) Coordenadas confirmadas por el usuario en el mapa (pin). Tienen prioridad.
+        // 2) Si no llegan, se geocodifica en el servidor (fuera de la transacción).
+        // Si todo falla, quedan en null y la publicación continúa igual.
+        $coords = self::coordsConfirmadas($_POST['latitud'] ?? '', $_POST['longitud'] ?? '')
+            ?? self::geocodificarDireccion($ciudadId, $calle, $numExt, $barrio);
 
         $pdo = Database::conexion();
         $pdo->beginTransaction();
@@ -189,6 +191,24 @@ class PropiedadController
             ]);
             $guardadas++;
         }
+    }
+
+    /**
+     * Valida las coordenadas que el usuario confirmó en el mapa (inputs ocultos).
+     * Devuelve null si faltan o están fuera de rango.
+     * @return array{lat:float,lon:float}|null
+     */
+    private static function coordsConfirmadas(string $lat, string $lon): ?array
+    {
+        if ($lat === '' || $lon === '' || !is_numeric($lat) || !is_numeric($lon)) {
+            return null;
+        }
+        $lat = (float) $lat;
+        $lon = (float) $lon;
+        if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+            return null;
+        }
+        return ['lat' => $lat, 'lon' => $lon];
     }
 
     /**

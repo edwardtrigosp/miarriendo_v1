@@ -1,5 +1,5 @@
 <?php
-$title  = 'Explorar Arriendos | miarriendo.online';
+$title  = 'Arriendos | miarriendo.online';
 $styles = ['arriendos.css', 'filtros.css'];
 require __DIR__ . '/layouts/header.php';
 

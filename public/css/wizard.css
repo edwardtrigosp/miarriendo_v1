@@ -295,3 +295,111 @@ select.form_input {
         gap: 0;
     }
 }
+
+/* ================================================================
+   Verificación de la ubicación en el mapa (publicar propiedad)
+   ================================================================ */
+/* Selector de modo (control segmentado) */
+.geo_modo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background-color: var(--bg_color);
+    border: 1px solid var(--border_color);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px 0 12px;
+}
+.geo_modo_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text_muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.geo_modo_btn:hover {
+    color: var(--text_main);
+}
+.geo_modo_btn.is_active {
+    background-color: var(--surface_color);
+    color: var(--primary_color);
+    box-shadow: var(--shadow_sm);
+}
+
+/* Panel del modo GPS */
+.geo_panel_gps {
+    background-color: var(--bg_color);
+    border: 1px solid var(--border_color);
+    border-radius: 10px;
+    padding: 16px;
+}
+.geo_panel_gps .help_hint {
+    margin: 0 0 12px;
+}
+.geo_panel_gps .geo_gps_btn {
+    margin-bottom: 12px;
+}
+
+/* Resumen de la dirección detectada por GPS */
+.geo_resumen {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background-color: var(--accent_color);
+    border-radius: 8px;
+    color: var(--text_main);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.geo_resumen .material-symbols-outlined {
+    color: var(--primary_color);
+    flex-shrink: 0;
+}
+
+.geo_gps_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--accent_color);
+    color: var(--primary_color);
+    border: 1px solid var(--primary_color);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.geo_gps_btn:hover {
+    background-color: var(--primary_color);
+    color: #ffffff;
+}
+.geo_gps_btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+.geo_mapa {
+    height: 280px;
+    margin-top: 12px;
+    border-radius: var(--border_radius);
+    border: 1px solid var(--border_color);
+    z-index: 0;
+}
+.geo_estado {
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    min-height: 1.2em;
+    color: var(--text_muted);
+}
+.geo_estado.is_ok  { color: #15803d; }
+.geo_estado.is_err { color: #b91c1c; }

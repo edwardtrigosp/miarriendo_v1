@@ -31,7 +31,7 @@ $ubicacion = $direccion
 ?>
 
     <main class="main_container">
-        <a href="/arriendos" class="detalle_back"><span class="material-symbols-outlined icon_sm">arrow_back</span> Volver a explorar</a>
+        <a href="/arriendos" class="detalle_back"><span class="material-symbols-outlined icon_sm">arrow_back</span> Volver a arriendos</a>
 
         <div class="detalle_layout">
 

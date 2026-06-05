@@ -9,7 +9,7 @@
 <?php if (!isset($showFooter) || $showFooter): ?>
 <footer class="footer_main">
     <nav class="footer_links">
-        <a href="/arriendos">Explorar</a>
+        <a href="/arriendos">Arriendos</a>
         <a href="/blog">Blog</a>
         <a href="/cookies">Cookies</a>
     </nav>
