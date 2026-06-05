@@ -34,8 +34,10 @@ class Database
                 PDO::ATTR_EMULATE_PREPARES   => false,                    // prepares reales (más seguro)
             ]);
         } catch (PDOException $e) {
+            // No exponer el detalle al usuario: registrarlo y mostrar un mensaje genérico.
+            error_log('[miarriendo] Error de conexión a la BD: ' . $e->getMessage());
             http_response_code(500);
-            exit('Error de conexión a la base de datos: ' . $e->getMessage());
+            exit('No se pudo conectar con el servicio en este momento. Intenta más tarde.');
         }
 
         return self::$pdo;

@@ -20,6 +20,7 @@ require __DIR__ . '/layouts/header.php';
             <?php endif; ?>
 
             <form action="/propiedades" method="POST" id="propiedad_form" enctype="multipart/form-data" novalidate>
+                <?= csrf_field() ?>
 
                 <fieldset class="form_fieldset">
                     <legend class="form_legend">Información de la propiedad</legend>
@@ -183,6 +184,15 @@ require __DIR__ . '/layouts/header.php';
                     <!-- Coordenadas confirmadas (las llena el JS) -->
                     <input type="hidden" name="latitud"  id="latitud">
                     <input type="hidden" name="longitud" id="longitud">
+                </fieldset>
+
+                <fieldset class="form_fieldset">
+                    <legend class="form_legend">Contrato de arrendamiento</legend>
+                    <p class="help_hint">Generaremos un contrato estándar con los datos del inmueble. Aquí puedes añadir <strong>cláusulas adicionales</strong> (reglas del edificio, parqueadero, fecha de pago, etc.). Las verá el inquilino antes de solicitar el arriendo.</p>
+                    <div class="form_group">
+                        <label for="clausulas_contrato" class="form_label">Cláusulas adicionales <span class="label_hint">(Opcional)</span></label>
+                        <textarea id="clausulas_contrato" name="clausulas_contrato" class="form_input" rows="5" maxlength="5000" placeholder="Ej: El canon se paga los primeros 5 días del mes. El inmueble incluye un parqueadero. No se permite subarrendar."></textarea>
+                    </div>
                 </fieldset>
 
                 <button type="submit" id="propiedad_submit" class="btn_primary u_full_width" disabled>Publicar ahora</button>

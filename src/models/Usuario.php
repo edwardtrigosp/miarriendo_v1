@@ -52,6 +52,31 @@ class Usuario
         return (bool) $stmt->fetchColumn();
     }
 
+    /** Actualiza los datos básicos del perfil. */
+    public static function actualizar(int $id, array $d): void
+    {
+        $sql = "UPDATE usuarios
+                   SET nombre = :nombre, apellidos = :apellidos, email = :email, telefono = :telefono
+                 WHERE usuario_id = :id";
+        Database::conexion()->prepare($sql)->execute([
+            ':nombre'    => $d['nombre'],
+            ':apellidos' => $d['apellidos'],
+            ':email'     => $d['email'],
+            ':telefono'  => ($d['telefono'] ?? '') !== '' ? $d['telefono'] : null,
+            ':id'        => $id,
+        ]);
+    }
+
+    /** ¿El correo lo usa OTRO usuario distinto de $excluyeId? */
+    public static function emailEnUsoPorOtro(string $email, int $excluyeId): bool
+    {
+        $stmt = Database::conexion()->prepare(
+            "SELECT 1 FROM usuarios WHERE email = :email AND usuario_id <> :id LIMIT 1"
+        );
+        $stmt->execute([':email' => $email, ':id' => $excluyeId]);
+        return (bool) $stmt->fetchColumn();
+    }
+
     /** Registra el momento del último acceso. */
     public static function actualizarUltimoAcceso(int $id): void
     {

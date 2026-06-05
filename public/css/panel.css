@@ -119,3 +119,64 @@
         gap: 8px;
     }
 }
+
+/* ---- Lista de solicitudes/contratos ---- */
+.solicitud_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.solicitud_row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.solicitud_row:hover {
+    border-color: var(--primary_color);
+    box-shadow: var(--shadow_sm);
+}
+.solicitud_info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+.solicitud_info strong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.solicitud_precio {
+    font-weight: 700;
+    color: var(--primary_color);
+    white-space: nowrap;
+}
+.panel_badge_num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-left: 8px;
+    background-color: var(--primary_color);
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+@media (max-width: 540px) {
+    .solicitud_row {
+        flex-wrap: wrap;
+    }
+}

@@ -1,11 +1,25 @@
 <?php
 $title  = 'Mi Panel | miarriendo.online';
-$styles = ['arriendos.css', 'panel.css'];
+$styles = ['arriendos.css', 'panel.css', 'contrato.css'];
 require __DIR__ . '/layouts/header.php';
 
 $nombre      = $nombre ?? '';
 $propiedades = $propiedades ?? [];
 $arriendos   = $arriendos ?? [];
+$solicitudesRecibidas = $solicitudesRecibidas ?? [];
+$solicitudesEnviadas  = $solicitudesEnviadas ?? [];
+
+// Etiqueta + clase de color por estado del contrato
+$estadoContrato = static function (string $e): array {
+    return [
+        'borrador'  => ['Pendiente', 'is_pendiente'],
+        'enviado'   => ['Aprobado', 'is_aprobado'],
+        'aceptado'  => ['Firmado', 'is_aceptado'],
+        'rechazado' => ['Rechazado', 'is_rechazado'],
+        'anulado'   => ['Anulado', 'is_rechazado'],
+    ][$e] ?? [$e, ''];
+};
+$pendientes = count(array_filter($solicitudesRecibidas, static fn($s) => $s['estado'] === 'borrador'));
 ?>
 
     <main class="main_container">
@@ -61,6 +75,48 @@ $arriendos   = $arriendos ?? [];
                 </div>
             <?php endif; ?>
         </section>
+
+        <!-- Solicitudes recibidas (rol propietario) -->
+        <?php if (!empty($solicitudesRecibidas)): ?>
+        <section class="panel_section">
+            <div class="panel_section_head">
+                <h2 class="panel_section_title">Solicitudes recibidas <?php if ($pendientes > 0): ?><span class="panel_badge_num"><?= $pendientes ?></span><?php endif; ?></h2>
+            </div>
+            <div class="solicitud_list">
+                <?php foreach ($solicitudesRecibidas as $s): [$et, $ec] = $estadoContrato($s['estado']); ?>
+                    <a href="/contrato/<?= e($s['contrato_id']) ?>" class="solicitud_row">
+                        <div class="solicitud_info">
+                            <strong><?= e($s['propiedad_titulo']) ?></strong>
+                            <span class="u_text_muted">Solicita <?= e(trim($s['inquilino_nombre'] . ' ' . $s['inquilino_apellidos'])) ?></span>
+                        </div>
+                        <div class="solicitud_precio">$<?= number_format((float) $s['monto_mensual'], 0, ',', '.') ?> / mes</div>
+                        <span class="contrato_estado_badge <?= e($ec) ?>"><?= e($et) ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- Mis solicitudes (rol inquilino) -->
+        <?php if (!empty($solicitudesEnviadas)): ?>
+        <section class="panel_section">
+            <div class="panel_section_head">
+                <h2 class="panel_section_title">Mis solicitudes</h2>
+            </div>
+            <div class="solicitud_list">
+                <?php foreach ($solicitudesEnviadas as $s): [$et, $ec] = $estadoContrato($s['estado']); ?>
+                    <a href="/contrato/<?= e($s['contrato_id']) ?>" class="solicitud_row">
+                        <div class="solicitud_info">
+                            <strong><?= e($s['propiedad_titulo']) ?></strong>
+                            <span class="u_text_muted">Propietario: <?= e(trim($s['propietario_nombre'] . ' ' . $s['propietario_apellidos'])) ?></span>
+                        </div>
+                        <div class="solicitud_precio">$<?= number_format((float) $s['monto_mensual'], 0, ',', '.') ?> / mes</div>
+                        <span class="contrato_estado_badge <?= e($ec) ?>"><?= e($et) ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
 
         <!-- Mis arriendos (rol inquilino) -->
         <section class="panel_section">

@@ -111,6 +111,7 @@ CREATE TABLE propiedades (
     disponible              TINYINT(1)    NOT NULL DEFAULT 1,
     amueblado               TINYINT(1)    NOT NULL DEFAULT 0,
     mascotas_permitidas     TINYINT(1)    NOT NULL DEFAULT 0,
+    clausulas_contrato      MEDIUMTEXT,                 -- cláusulas extra del contrato (las define el dueño al publicar)
     created_at              DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at              DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_propiedades_propietario

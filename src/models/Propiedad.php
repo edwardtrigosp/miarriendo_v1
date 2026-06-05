@@ -12,11 +12,11 @@ class Propiedad
         $sql = "INSERT INTO propiedades
                     (propietario_id, direccion_id, titulo, descripcion, tipo_propiedad,
                      num_habitaciones, num_banos, area_m2, precio_alquiler_mensual, deposito,
-                     disponible, amueblado, mascotas_permitidas)
+                     disponible, amueblado, mascotas_permitidas, clausulas_contrato)
                 VALUES
                     (:propietario_id, :direccion_id, :titulo, :descripcion, :tipo_propiedad,
                      :num_habitaciones, :num_banos, :area_m2, :precio_alquiler_mensual, :deposito,
-                     :disponible, :amueblado, :mascotas_permitidas)";
+                     :disponible, :amueblado, :mascotas_permitidas, :clausulas_contrato)";
         $pdo->prepare($sql)->execute([
             ':propietario_id'          => $d['propietario_id'],
             ':direccion_id'            => $d['direccion_id'],
@@ -31,6 +31,7 @@ class Propiedad
             ':disponible'              => $d['disponible'],
             ':amueblado'               => $d['amueblado'],
             ':mascotas_permitidas'     => $d['mascotas_permitidas'],
+            ':clausulas_contrato'      => $d['clausulas_contrato'] ?? null,
         ]);
         return (int) $pdo->lastInsertId();
     }

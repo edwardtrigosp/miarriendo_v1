@@ -69,6 +69,85 @@
     line-height: 1.7;
 }
 
+/* ---- Caja "Solicitar arriendo" (placeholder) ---- */
+.solicitar_caja {
+    max-width: 520px;
+    margin: 60px auto;
+    text-align: center;
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_md);
+    padding: 48px 32px;
+}
+.solicitar_caja .material-symbols-outlined {
+    color: var(--primary_color);
+}
+.solicitar_caja h1 {
+    margin: 12px 0 8px;
+}
+.solicitar_caja p {
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+.solicitar_caja .btn_primary {
+    margin-top: 12px;
+}
+
+/* ---- Documento de contrato ---- */
+.contrato_doc {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    padding: 28px;
+    margin-top: 12px;
+}
+.contrato_doc_titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.02em;
+    margin-bottom: 16px;
+}
+.contrato_partes {
+    color: var(--text_main);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border_color);
+}
+.contrato_clausulas {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.contrato_clausula .clausula_titulo {
+    display: block;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--primary_color);
+    margin-bottom: 4px;
+}
+.contrato_clausula p {
+    color: var(--text_main);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.detalle_nota_dueno {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text_muted);
+    background-color: var(--bg_color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+}
+.detalle_nota_dueno .material-symbols-outlined {
+    color: var(--primary_color);
+}
+
 .detalle_mapa {
     height: 280px;
     margin-top: 16px;

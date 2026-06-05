@@ -15,6 +15,7 @@ require __DIR__ . '/layouts/header.php';
                 <?php endif; ?>
 
                 <form action="/login" method="POST">
+                    <?= csrf_field() ?>
                     <div class="form_group">
                         <label for="email" class="form_label">Correo electrónico</label>
                         <input type="email" id="email" name="email" class="form_input" placeholder="nombre@correo.com" required>

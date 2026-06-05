@@ -40,7 +40,15 @@ $inicial = strtoupper(substr($usuario['nombre'] ?? 'U', 0, 1));
                     </div>
                 </div>
 
+                <?php if (!empty($exito)): ?>
+                    <p class="form_success" role="status"><?= e($exito) ?></p>
+                <?php endif; ?>
+                <?php if (!empty($error)): ?>
+                    <p class="form_error" role="alert"><?= e($error) ?></p>
+                <?php endif; ?>
+
                 <form action="/perfil/actualizar" method="POST">
+                    <?= csrf_field() ?>
 
                     <div class="form_row_double">
                         <div class="form_group">
