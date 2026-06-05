@@ -88,6 +88,8 @@ $router->get('/propiedad/{id}', [PropiedadController::class, 'detalle']);
 $router->get('/propiedad/{id}/editar',  [PropiedadController::class, 'editar']);
 $router->post('/propiedad/{id}/editar', [PropiedadController::class, 'actualizar']);
 $router->post('/propiedad/{id}/eliminar', [PropiedadController::class, 'eliminar']);
+$router->post('/propiedad/{id}/fotos', [PropiedadController::class, 'agregarFotos']);
+$router->post('/propiedad/{id}/foto/{imgId}/eliminar', [PropiedadController::class, 'eliminarFoto']);
 $router->get('/propiedad/{id}/solicitar', [PropiedadController::class, 'solicitar']);
 $router->post('/propiedad/{id}/solicitar', [ContratoController::class, 'crearSolicitud']);
 $router->get('/contrato/{id}',          [ContratoController::class, 'ver']);

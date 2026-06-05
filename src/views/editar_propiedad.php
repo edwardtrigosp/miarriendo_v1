@@ -18,6 +18,9 @@ $tipos = ['Apartamento', 'Casa', 'Apartaestudio', 'Habitación', 'Local'];
                 <p class="auth_subtitle">Actualiza la información de <strong><?= $val('titulo') ?></strong>. La ciudad no se puede cambiar aquí.</p>
             </header>
 
+            <?php if (!empty($exito)): ?>
+                <p class="form_success" role="status"><?= e($exito) ?></p>
+            <?php endif; ?>
             <?php if (!empty($error)): ?>
                 <p class="form_error" role="alert"><?= e($error) ?></p>
             <?php endif; ?>
@@ -127,6 +130,42 @@ $tipos = ['Apartamento', 'Casa', 'Apartaestudio', 'Habitación', 'Local'];
 
                 <button type="submit" class="btn_primary u_full_width">Guardar cambios</button>
             </form>
+
+            <!-- Gestión de fotos (formularios independientes) -->
+            <fieldset class="form_fieldset fotos_fieldset">
+                <legend class="form_legend">Fotos de la propiedad</legend>
+
+                <?php if (!empty($imagenes)): ?>
+                    <div class="fotos_grid">
+                        <?php foreach ($imagenes as $img): ?>
+                            <div class="foto_item">
+                                <img src="<?= e($img['url_imagen']) ?>" alt="Foto">
+                                <?php if ((int) $img['es_principal'] === 1): ?>
+                                    <span class="foto_portada">Portada</span>
+                                <?php endif; ?>
+                                <form action="/propiedad/<?= e($p['propiedad_id']) ?>/foto/<?= e($img['imagen_id']) ?>/eliminar" method="POST" onsubmit="return confirm('¿Eliminar esta foto?');">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="foto_eliminar" title="Eliminar foto">
+                                        <span class="material-symbols-outlined icon_sm">delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="u_text_muted">Esta propiedad aún no tiene fotos.</p>
+                <?php endif; ?>
+
+                <form action="/propiedad/<?= e($p['propiedad_id']) ?>/fotos" method="POST" enctype="multipart/form-data" class="fotos_add">
+                    <?= csrf_field() ?>
+                    <label for="imagenes" class="upload_zone">
+                        <span class="material-symbols-outlined icon_lg">add_photo_alternate</span>
+                        <span class="upload_text">Añadir fotos</span>
+                        <span class="help_hint">JPG, PNG o WEBP · máx. 3 MB c/u</span>
+                        <input type="file" id="imagenes" name="imagenes[]" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden onchange="this.form.submit()">
+                    </label>
+                </form>
+            </fieldset>
         </section>
     </div>
 

@@ -158,7 +158,8 @@ class PropiedadController
         ];
         $maxBytes = 3 * 1024 * 1024; // 3 MB
 
-        $guardadas = 0;
+        // Continúa la numeración por si la propiedad ya tenía fotos.
+        $orden = ImagenPropiedad::maxOrden($propiedadId) + 1;
         $total = count($_FILES['imagenes']['name']);
 
         for ($i = 0; $i < $total; $i++) {
@@ -187,11 +188,14 @@ class PropiedadController
                 'propiedad_id' => $propiedadId,
                 'url_imagen'   => '/uploads/propiedades/' . $nombre,
                 'descripcion'  => null,
-                'orden'        => $guardadas,
-                'es_principal' => $guardadas === 0 ? 1 : 0,
+                'orden'        => $orden,
+                'es_principal' => 0,
             ]);
-            $guardadas++;
+            $orden++;
         }
+
+        // Garantiza que siempre haya una portada (la de menor orden).
+        ImagenPropiedad::asegurarPrincipal($propiedadId);
     }
 
     /**
@@ -279,6 +283,8 @@ class PropiedadController
         view('editar_propiedad', [
             'title'     => 'Editar propiedad | miarriendo.online',
             'propiedad' => $propiedad,
+            'imagenes'  => ImagenPropiedad::porPropiedad((int) $id),
+            'exito'     => flash('propiedad_ok'),
         ]);
     }
 
@@ -370,6 +376,40 @@ class PropiedadController
         Propiedad::archivar((int) $id);
         flash('panel_ok', 'La propiedad "' . $propiedad['titulo'] . '" fue eliminada.');
         redirect('/panel');
+    }
+
+    /** Añade fotos a una propiedad existente (solo el dueño). */
+    public function agregarFotos(string $id): void
+    {
+        $propiedad = $this->soloDueno((int) $id);
+        if ($propiedad === null) {
+            return;
+        }
+        $this->procesarImagenes((int) $id);
+        flash('propiedad_ok', 'Fotos actualizadas.');
+        redirect('/propiedad/' . (int) $id . '/editar');
+    }
+
+    /** Elimina una foto de una propiedad (solo el dueño). */
+    public function eliminarFoto(string $id, string $imgId): void
+    {
+        $propiedad = $this->soloDueno((int) $id);
+        if ($propiedad === null) {
+            return;
+        }
+
+        $img = ImagenPropiedad::buscarPorId((int) $imgId);
+        if ($img !== null && (int) $img['propiedad_id'] === (int) $id) {
+            // Borra el archivo del disco (si existe) y el registro
+            $ruta = BASE_PATH . '/public' . $img['url_imagen'];
+            if (is_file($ruta)) {
+                @unlink($ruta);
+            }
+            ImagenPropiedad::eliminar((int) $imgId);
+            ImagenPropiedad::asegurarPrincipal((int) $id); // re-asigna portada si hacía falta
+        }
+
+        redirect('/propiedad/' . (int) $id . '/editar');
     }
 
     /**
