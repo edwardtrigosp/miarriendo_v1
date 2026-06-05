@@ -92,6 +92,7 @@ $router->post('/contrato/{id}/aprobar', [ContratoController::class, 'aprobar']);
 $router->post('/contrato/{id}/rechazar', [ContratoController::class, 'rechazar']);
 $router->get('/contrato/{id}/firmar',   [ContratoController::class, 'firmarForm']);
 $router->post('/contrato/{id}/firmar',  [ContratoController::class, 'firmar']);
+$router->get('/contrato/{id}/pdf',      [ContratoController::class, 'pdf']);
 $router->get('/ruta',        [PropiedadController::class, 'ruta']);
 $router->get('/login',       [AuthController::class, 'showLogin']);
 $router->get('/registro',    [AuthController::class, 'showRegistro']);

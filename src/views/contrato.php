@@ -26,7 +26,12 @@ $money = static fn($v) => '$' . number_format((float) $v, 0, ',', '.');
                     <h1 class="page_title">Contrato de arrendamiento</h1>
                     <p class="u_text_muted"><?= e($contrato['propiedad_titulo']) ?></p>
                 </div>
-                <span class="contrato_estado_badge <?= e($estadoClase) ?>"><?= e($estadoTexto) ?></span>
+                <div class="contrato_cabecera_acciones">
+                    <span class="contrato_estado_badge <?= e($estadoClase) ?>"><?= e($estadoTexto) ?></span>
+                    <a href="/contrato/<?= e($contrato['contrato_id']) ?>/pdf" class="btn_outline btn_sm">
+                        <span class="material-symbols-outlined icon_sm">picture_as_pdf</span> Descargar PDF
+                    </a>
+                </div>
             </header>
 
             <?php if (!empty($exito)): ?>

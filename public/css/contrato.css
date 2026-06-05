@@ -150,3 +150,17 @@
     flex-shrink: 0;
     accent-color: var(--primary_color);
 }
+
+/* Acciones en la cabecera del contrato (badge + PDF) */
+.contrato_cabecera_acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+.contrato_cabecera_acciones .btn_outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}

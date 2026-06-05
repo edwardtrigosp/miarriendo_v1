@@ -134,6 +134,32 @@ class ContratoController
         ]);
     }
 
+    /** Genera y descarga el PDF del contrato (solo propietario o inquilino). */
+    public function pdf(string $id): void
+    {
+        requiereLogin();
+        $contrato = Contrato::buscarPorId((int) $id);
+
+        if ($contrato === null) {
+            http_response_code(404);
+            view('404', ['title' => 'Contrato no encontrado | 404']);
+            return;
+        }
+
+        $usuarioId = (int) $_SESSION['usuario_id'];
+        if ($usuarioId !== (int) $contrato['propietario_id'] && $usuarioId !== (int) $contrato['inquilino_id']) {
+            http_response_code(403);
+            view('error', ['title' => 'Sin acceso | 403', 'codigo' => '403', 'mensaje' => 'No tienes acceso a este contrato.']);
+            return;
+        }
+
+        require_once BASE_PATH . '/src/core/ContratoPdf.php';
+        $pdf = new ContratoPdf($contrato);
+        $pdf->construir();
+        $pdf->Output('D', 'contrato_' . (int) $id . '.pdf');
+        exit;
+    }
+
     /** El propietario aprueba la solicitud: contrato -> enviado. */
     public function aprobar(string $id): void
     {
