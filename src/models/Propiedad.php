@@ -65,7 +65,7 @@ class Propiedad
      */
     public static function listarDisponibles(array $f = []): array
     {
-        $where  = ['p.disponible = 1'];
+        $where  = ['p.disponible = 1', 'p.archivada = 0'];
         $params = [];
         $columnaExtra = '';
 
@@ -126,7 +126,7 @@ class Propiedad
     /** Lista TODAS las propiedades de un propietario (disponibles o no). */
     public static function listarPorPropietario(int $propietarioId): array
     {
-        $sql = self::selectTarjeta() . " WHERE p.propietario_id = :id ORDER BY p.created_at DESC";
+        $sql = self::selectTarjeta() . " WHERE p.propietario_id = :id AND p.archivada = 0 ORDER BY p.created_at DESC";
         $stmt = Database::conexion()->prepare($sql);
         $stmt->execute([':id' => $propietarioId]);
         return $stmt->fetchAll();
@@ -141,12 +141,47 @@ class Propiedad
         $stmt->execute([':d' => $disponible, ':id' => $id]);
     }
 
+    /** Actualiza los campos editables de una propiedad. */
+    public static function actualizar(int $id, array $d): void
+    {
+        $sql = "UPDATE propiedades SET
+                    titulo = :titulo, descripcion = :descripcion, tipo_propiedad = :tipo_propiedad,
+                    num_habitaciones = :num_habitaciones, num_banos = :num_banos, area_m2 = :area_m2,
+                    precio_alquiler_mensual = :precio_alquiler_mensual, deposito = :deposito,
+                    disponible = :disponible, amueblado = :amueblado, mascotas_permitidas = :mascotas_permitidas,
+                    clausulas_contrato = :clausulas_contrato
+                WHERE propiedad_id = :id";
+        Database::conexion()->prepare($sql)->execute([
+            ':titulo'                  => $d['titulo'],
+            ':descripcion'             => $d['descripcion'] ?? null,
+            ':tipo_propiedad'          => $d['tipo_propiedad'],
+            ':num_habitaciones'        => $d['num_habitaciones'] ?? null,
+            ':num_banos'               => $d['num_banos'] ?? null,
+            ':area_m2'                 => $d['area_m2'] ?? null,
+            ':precio_alquiler_mensual' => $d['precio_alquiler_mensual'],
+            ':deposito'                => $d['deposito'] ?? null,
+            ':disponible'              => $d['disponible'],
+            ':amueblado'               => $d['amueblado'],
+            ':mascotas_permitidas'     => $d['mascotas_permitidas'],
+            ':clausulas_contrato'      => $d['clausulas_contrato'] ?? null,
+            ':id'                      => $id,
+        ]);
+    }
+
+    /** Borrado lógico: archiva la propiedad (la oculta sin perder el histórico). */
+    public static function archivar(int $id): void
+    {
+        Database::conexion()->prepare(
+            "UPDATE propiedades SET archivada = 1, disponible = 0 WHERE propiedad_id = :id"
+        )->execute([':id' => $id]);
+    }
+
     /** Busca una propiedad por su ID con todos sus detalles. Devuelve null si no existe. */
     public static function buscarPorId(int $id): ?array
     {
         $sql = "SELECT p.*,
                        d.calle, d.numero_exterior, d.barrio, d.codigo_postal, d.referencia,
-                       d.latitud, d.longitud,
+                       d.latitud, d.longitud, d.ciudad_id,
                        c.nombre AS ciudad, dep.nombre AS departamento,
                        u.nombre AS propietario_nombre, u.apellidos AS propietario_apellidos,
                        u.telefono AS propietario_telefono, u.email AS propietario_email
