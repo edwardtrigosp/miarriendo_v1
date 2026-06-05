@@ -29,6 +29,15 @@ $styles = $styles ?? [];
     <?php endforeach; ?>
 </head>
 <body>
-<?php if (empty($hideNav)): ?>
+<?php
+$autenticado = isset($_SESSION['usuario_id']);
+// "App shell": menú lateral global cuando hay sesión (y la página no oculta el nav).
+$appShell = empty($hideNav) && $autenticado;
+?>
+<?php if ($appShell): ?>
+    <div class="app_shell">
+        <?php require __DIR__ . '/app_sidebar.php'; ?>
+        <div class="app_main">
+<?php elseif (empty($hideNav)): ?>
     <?php require __DIR__ . '/nav.php'; ?>
 <?php endif; ?>

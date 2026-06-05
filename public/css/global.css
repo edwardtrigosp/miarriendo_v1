@@ -348,3 +348,148 @@ body {
         justify-content: center;
     }
 }
+
+/* ================================================================
+   App shell: menú lateral global (usuarios con sesión)
+   ================================================================ */
+.app_shell {
+    display: flex;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+.app_sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: transparent;   /* mismo fondo que el contenido (sin corte) */
+    padding: 22px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.app_brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary_color);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    padding: 0 8px 12px;
+}
+
+.app_profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 8px;
+    margin-bottom: 6px;
+    border-top: 1px solid var(--border_color);
+    border-bottom: 1px solid var(--border_color);
+}
+.app_avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary_color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.app_profile_info { min-width: 0; }
+.app_profile_info strong {
+    display: block;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.app_profile_link {
+    font-size: 0.78rem;
+    color: var(--text_muted);
+    text-decoration: none;
+}
+.app_profile_link:hover { color: var(--primary_color); }
+
+.app_nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.app_nav_top { margin-top: 8px; }
+.app_nav_bottom {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid var(--border_color);
+}
+.app_nav_link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    color: var(--text_muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+.app_nav_link .material-symbols-outlined { font-size: 22px; }
+.app_nav_link:hover {
+    background-color: var(--bg_color);
+    color: var(--text_main);
+}
+.app_nav_link.is_active {
+    background-color: var(--surface_color); /* tarjeta blanca "flotando" sobre el fondo */
+    color: var(--primary_color);
+    font-weight: 600;
+    box-shadow: var(--shadow_sm);
+}
+.app_logout_form { margin: 0; }
+.app_logout_btn:hover { color: var(--danger_color); }
+
+.app_main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Responsive: el menú lateral pasa a barra superior */
+@media (max-width: 860px) {
+    .app_shell { flex-direction: column; }
+    .app_sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+        border-right: none;
+        border-bottom: 1px solid var(--border_color);
+        padding: 12px 16px;
+    }
+    .app_brand { padding: 0 12px 0 0; }
+    .app_profile {
+        border: none;
+        margin: 0 auto 0 0;
+        padding: 0;
+        order: 3;
+    }
+    .app_nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .app_nav_bottom { margin-top: 0; border-top: none; }
+    .app_nav_link span:not(.material-symbols-outlined) { display: none; } /* solo iconos en móvil */
+}

@@ -1,10 +1,74 @@
 /* ================================================================
-   Panel principal (dashboard del usuario)
+   Panel principal (dashboard del usuario) — layout de dos columnas
    ================================================================ */
-.panel_header {
-    margin-top: 40px;
-    margin-bottom: 24px;
+.panel_wrap {
+    padding-top: 40px;
+    padding-bottom: 80px;
 }
+.panel_header {
+    margin-bottom: 18px;
+}
+
+/* Pestañas horizontales (sub-navegación del panel) */
+.panel_menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border_color);
+}
+.panel_menu_item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border_color);
+    background-color: var(--surface_color);
+    color: var(--text_muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.15s ease;
+}
+.panel_menu_item .material-symbols-outlined { font-size: 20px; }
+.panel_menu_item:hover {
+    border-color: var(--primary_color);
+    color: var(--primary_color);
+}
+.panel_menu_item.is_active {
+    background-color: var(--primary_color);
+    border-color: var(--primary_color);
+    color: #fff;
+}
+.panel_menu_count {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+.panel_menu_item.is_active .panel_menu_count {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+.panel_menu_count.is_alert {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+/* Vistas conmutables (pestañas del panel) */
+.panel_view[hidden] { display: none; }
+.panel_quick {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.u_mt_lg { margin-top: 36px; }
+
 .panel_greeting {
     font-size: 2rem;
     letter-spacing: -0.02em;
