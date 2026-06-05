@@ -63,50 +63,57 @@
     // ------------------------------------------------------------------
     // Panel de progreso
     // ------------------------------------------------------------------
-    var titulo = document.getElementById('titulo');
-    var tipo   = document.getElementById('tipo_propiedad');
-    var precio = document.getElementById('precio_alquiler_mensual');
-    var calle  = document.getElementById('calle');
+    var titulo    = document.getElementById('titulo');
+    var tipo      = document.getElementById('tipo_propiedad');
+    var precio    = document.getElementById('precio_alquiler_mensual');
+    var calle     = document.getElementById('calle');
+    var clausulas = document.getElementById('clausulas_contrato');
+    var imagenes  = document.getElementById('imagenes');
 
     var progressFill    = document.getElementById('progress_fill');
     var progressPercent = document.getElementById('progress_percent');
     var progressHint    = document.getElementById('progress_hint');
     var submitBtn       = document.getElementById('propiedad_submit');
 
+    // Una regla por SECCIÓN. Las opcionales (fotos, contrato) muestran su
+    // check al llenarse, pero no cuentan para poder publicar.
     var reglas = {
-        titulo:          function () { return titulo.value.trim().length > 0; },
-        tipo_propiedad:  function () { return tipo.value !== ''; },
-        precio_alquiler_mensual: function () { return precio.value !== '' && parseFloat(precio.value) > 0; },
-        ciudad:          function () { return selCiudad.value !== ''; },
-        calle:           function () { return calle.value.trim().length > 0; }
+        informacion:     function () { return titulo.value.trim().length > 0 && tipo.value !== ''; },
+        fotos:           function () { return !!imagenes && imagenes.files.length > 0; },
+        caracteristicas: function () { return precio.value !== '' && parseFloat(precio.value) > 0; },
+        ubicacion:       function () { return selCiudad.value !== '' && calle.value.trim().length > 0; },
+        contrato:        function () { return !!clausulas && clausulas.value.trim().length > 0; }
     };
 
     var items = document.querySelectorAll('.progress_item');
-    var total = items.length;
 
     function actualizarProgreso() {
-        var completos = 0;
+        var totalReq = 0, completosReq = 0;
 
         items.forEach(function (item) {
             var req = item.getAttribute('data-req');
             var ok = reglas[req] ? reglas[req]() : false;
             item.classList.toggle('complete', ok);
-            if (ok) { completos++; }
+            // Solo las secciones obligatorias cuentan para el % y el submit.
+            if (item.getAttribute('data-optional') === null) {
+                totalReq++;
+                if (ok) { completosReq++; }
+            }
         });
 
-        var porcentaje = Math.round((completos / total) * 100);
+        var porcentaje = totalReq ? Math.round((completosReq / totalReq) * 100) : 0;
         progressFill.style.width = porcentaje + '%';
         progressFill.setAttribute('aria-valuenow', porcentaje);
         progressPercent.textContent = porcentaje;
 
-        var listo = completos === total;
+        var listo = completosReq === totalReq;
         submitBtn.disabled = !listo;
 
         if (listo) {
             progressHint.textContent = '¡Todo listo! Ya puedes publicar tu propiedad.';
             progressHint.classList.add('is_ready');
         } else {
-            progressHint.textContent = 'Completa los campos obligatorios para publicar.';
+            progressHint.textContent = 'Completa las secciones obligatorias para publicar.';
             progressHint.classList.remove('is_ready');
         }
     }

@@ -8,9 +8,9 @@
 /* Rejilla de publicaciones */
 .blog_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
-    padding: 40px 0 80px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 8px;
 }
 
 /* Tarjeta de publicación */

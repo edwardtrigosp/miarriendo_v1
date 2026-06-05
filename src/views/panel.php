@@ -43,96 +43,78 @@ $titulos = [
 ?>
 
     <main class="main_container panel_wrap">
-        <?php if ($esResumen): ?>
-            <header class="panel_header">
-                <h1 class="panel_greeting">Hola, <?= e($nombre) ?> 👋</h1>
-                <p class="u_text_muted">Gestiona tus propiedades y tus arriendos desde aquí.</p>
-            </header>
-        <?php elseif (!in_array($ver, ['mis-propiedades', 'solicitudes-recibidas', 'mis-arriendos', 'mis-solicitudes'], true)): /* estas vistas llevan su encabezado dentro de la columna */ ?>
-            <header class="panel_header">
-                <h1 class="panel_greeting"><?= e($titulos[$ver][0] ?? 'Mi panel') ?></h1>
-                <p class="u_text_muted"><?= e($titulos[$ver][1] ?? '') ?></p>
-            </header>
-        <?php endif; ?>
-
         <?php if (!empty($exito)): ?>
             <p class="form_success" role="status"><?= e($exito) ?></p>
         <?php endif; ?>
 
         <?php if ($esResumen): ?>
-        <!-- Fila de KPIs -->
-        <div class="kpi_row">
-            <a href="/panel?ver=mis-propiedades" class="kpi_card">
-                <span class="material-symbols-outlined">home_work</span>
-                <strong><?= count($propiedades) ?></strong>
-                <span>Propiedades publicadas</span>
-            </a>
-            <a href="/panel?ver=mis-arriendos" class="kpi_card">
-                <span class="material-symbols-outlined">vpn_key</span>
-                <strong><?= (int) $arriendosActivos ?></strong>
-                <span>Arriendos activos</span>
-            </a>
-            <a href="/panel?ver=solicitudes-recibidas" class="kpi_card">
-                <span class="material-symbols-outlined">inbox</span>
-                <strong><?= count($solicitudesRecibidas) ?><?php if ($pendientes > 0): ?><span class="kpi_badge"><?= $pendientes ?> nueva<?= $pendientes > 1 ? 's' : '' ?></span><?php endif; ?></strong>
-                <span>Solicitudes recibidas</span>
-            </a>
-            <div class="kpi_card is_money">
-                <span class="material-symbols-outlined">payments</span>
-                <strong><?= $dinero($ingresoMensual) ?></strong>
-                <span>Ingreso mensual</span>
+        <div class="view_layout">
+            <!-- Columna izquierda: lo accionable -->
+            <div class="view_main">
+                <header class="panel_header">
+                    <h1 class="panel_greeting">Hola, <?= e($nombre) ?> 👋</h1>
+                    <p class="u_text_muted">Este es el resumen de tu actividad en miarriendo.</p>
+                </header>
+
+                <div class="dash_stack">
+                    <section class="dash_panel">
+                        <h2>Necesita tu atención <?php if (count($atencion) > 0): ?><span class="panel_badge_num"><?= count($atencion) ?></span><?php endif; ?></h2>
+                        <?php if (empty($atencion)): ?>
+                            <div class="dash_empty">
+                                <span class="material-symbols-outlined">task_alt</span>
+                                <p>Todo al día. No tienes solicitudes pendientes por responder.</p>
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($atencion as $s): ?>
+                                <?php $ini = strtoupper(mb_substr($s['inquilino_nombre'] ?? '?', 0, 1)); ?>
+                                <div class="req_row">
+                                    <div class="req_avatar"><?= e($ini) ?></div>
+                                    <div class="req_info">
+                                        <strong><?= e($s['propiedad_titulo']) ?></strong>
+                                        <span><?= e(trim($s['inquilino_nombre'] . ' ' . $s['inquilino_apellidos'])) ?> · <?= $dinero($s['monto_mensual']) ?>/mes</span>
+                                    </div>
+                                    <a href="/contrato/<?= e($s['contrato_id']) ?>" class="btn_primary btn_sm">Responder</a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </section>
+
+                    <section class="dash_panel">
+                        <h2>Actividad reciente</h2>
+                        <?php if (empty($actividad)): ?>
+                            <div class="dash_empty">
+                                <span class="material-symbols-outlined">history</span>
+                                <p>Aún no hay actividad. Empieza publicando o buscando una propiedad.</p>
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($actividad as $ev): ?>
+                                <div class="act_item">
+                                    <span class="material-symbols-outlined"><?= e($ev['icono']) ?></span>
+                                    <div>
+                                        <p><?= e($ev['texto']) ?></p>
+                                        <?php if (!empty($ev['fecha'])): ?><time><?= e(tiempo_hace($ev['fecha'])) ?></time><?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </section>
+                </div>
             </div>
-        </div>
 
-        <!-- Atención + actividad -->
-        <div class="dash_split">
-            <section class="dash_panel">
-                <h2>Necesita tu atención <?php if (count($atencion) > 0): ?><span class="panel_badge_num"><?= count($atencion) ?></span><?php endif; ?></h2>
-                <?php if (empty($atencion)): ?>
-                    <div class="dash_empty">
-                        <span class="material-symbols-outlined">task_alt</span>
-                        <p>Todo al día. No tienes solicitudes pendientes por responder.</p>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($atencion as $s): ?>
-                        <?php $ini = strtoupper(mb_substr($s['inquilino_nombre'] ?? '?', 0, 1)); ?>
-                        <div class="req_row">
-                            <div class="req_avatar"><?= e($ini) ?></div>
-                            <div class="req_info">
-                                <strong><?= e($s['propiedad_titulo']) ?></strong>
-                                <span><?= e(trim($s['inquilino_nombre'] . ' ' . $s['inquilino_apellidos'])) ?> · <?= $dinero($s['monto_mensual']) ?>/mes</span>
-                            </div>
-                            <a href="/contrato/<?= e($s['contrato_id']) ?>" class="btn_primary btn_sm">Responder</a>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </section>
-
-            <section class="dash_panel">
-                <h2>Actividad reciente</h2>
-                <?php if (empty($actividad)): ?>
-                    <div class="dash_empty">
-                        <span class="material-symbols-outlined">history</span>
-                        <p>Aún no hay actividad. Empieza publicando o buscando una propiedad.</p>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($actividad as $ev): ?>
-                        <div class="act_item">
-                            <span class="material-symbols-outlined"><?= e($ev['icono']) ?></span>
-                            <div>
-                                <p><?= e($ev['texto']) ?></p>
-                                <?php if (!empty($ev['fecha'])): ?><time><?= e(tiempo_hace($ev['fecha'])) ?></time><?php endif; ?>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </section>
-        </div>
-
-        <!-- Acciones rápidas -->
-        <div class="dash_quick">
-            <a href="/propiedades" class="btn_primary"><span class="material-symbols-outlined">add_home</span> Publicar propiedad</a>
-            <a href="/arriendos" class="btn_outline"><span class="material-symbols-outlined">search</span> Buscar arriendos</a>
+            <!-- Columna derecha: resumen -->
+            <aside class="side_card">
+                <h2>Resumen</h2>
+                <ul class="side_stats">
+                    <li class="side_stat"><span class="material-symbols-outlined">home_work</span> Propiedades <strong><?= count($propiedades) ?></strong></li>
+                    <li class="side_stat"><span class="material-symbols-outlined">vpn_key</span> Arriendos activos <strong><?= (int) $arriendosActivos ?></strong></li>
+                    <li class="side_stat"><span class="material-symbols-outlined">inbox</span> Solicitudes <strong><?= count($solicitudesRecibidas) ?></strong></li>
+                    <li class="side_stat"><span class="material-symbols-outlined">payments</span> Ingreso/mes <strong class="side_money"><?= $dinero($ingresoMensual) ?></strong></li>
+                </ul>
+                <div class="side_actions">
+                    <a href="/propiedades" class="btn_primary"><span class="material-symbols-outlined">add_home</span> Publicar propiedad</a>
+                    <a href="/arriendos" class="btn_outline"><span class="material-symbols-outlined">search</span> Buscar arriendos</a>
+                </div>
+            </aside>
         </div>
         <?php endif; ?>
 
