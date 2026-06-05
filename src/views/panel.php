@@ -66,14 +66,14 @@ $arriendos   = $arriendos ?? [];
         <section class="panel_section">
             <div class="panel_section_head">
                 <h2 class="panel_section_title">Mis arriendos</h2>
-                <a href="/arriendos" class="btn_outline btn_sm">Explorar</a>
+                <a href="/arriendos" class="btn_outline btn_sm">Arriendos</a>
             </div>
 
             <?php if (empty($arriendos)): ?>
                 <div class="empty_state">
                     <span class="material-symbols-outlined">vpn_key</span>
                     <p>No tienes arriendos activos.</p>
-                    <a href="/arriendos" class="btn_primary">Explorar propiedades</a>
+                    <a href="/arriendos" class="btn_primary">Ver arriendos</a>
                 </div>
             <?php else: ?>
                 <div class="arriendo_list">

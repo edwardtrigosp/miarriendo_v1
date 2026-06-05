@@ -7,7 +7,7 @@ $autenticado = isset($_SESSION['usuario_id']);
 <nav class="nav_bar">
     <a href="/" class="nav_logo">miarriendo</a>
     <div class="nav_links">
-        <a href="/arriendos" class="nav_link_item">Explorar</a>
+        <a href="/arriendos" class="nav_link_item">Arriendos</a>
         <a href="/blog" class="nav_link_item">Blog</a>
         <?php if ($autenticado): ?>
             <a href="/propiedades" class="nav_link_item">Publicar</a>

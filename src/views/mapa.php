@@ -86,7 +86,7 @@ $destinoTexto = $destino['texto'] ?? 'Calle 127 # 45 - 10, Bogotá';
 
                 <p class="ruta_estado" id="ruta_estado" role="status"></p>
 
-                <a href="/arriendos" class="ruta_volver"><span class="material-symbols-outlined icon_sm">arrow_back</span> Volver a explorar</a>
+                <a href="/arriendos" class="ruta_volver"><span class="material-symbols-outlined icon_sm">arrow_back</span> Volver a arriendos</a>
             </div>
         </aside>
 
