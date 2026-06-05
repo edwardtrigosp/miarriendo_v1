@@ -9,7 +9,6 @@ $arriendos   = $arriendos ?? [];
 $solicitudesRecibidas = $solicitudesRecibidas ?? [];
 $solicitudesEnviadas  = $solicitudesEnviadas ?? [];
 
-// Etiqueta + clase de color por estado del contrato
 $estadoContrato = static function (string $e): array {
     return [
         'borrador'  => ['Pendiente', 'is_pendiente'],
@@ -20,51 +19,41 @@ $estadoContrato = static function (string $e): array {
     ][$e] ?? [$e, ''];
 };
 $pendientes = count(array_filter($solicitudesRecibidas, static fn($s) => $s['estado'] === 'borrador'));
+$totalSolic = count($solicitudesRecibidas) + count($solicitudesEnviadas);
 ?>
 
-    <main class="main_container">
+    <main class="main_container panel_wrap">
         <header class="panel_header">
             <h1 class="panel_greeting">Hola, <?= e($nombre) ?> 👋</h1>
-            <p class="u_text_muted">Este es tu panel. Gestiona tus propiedades y tus arriendos.</p>
+            <p class="u_text_muted">Gestiona tus propiedades y tus arriendos desde aquí.</p>
         </header>
 
         <?php if (!empty($exito)): ?>
             <p class="form_success" role="status"><?= e($exito) ?></p>
         <?php endif; ?>
 
-        <!-- Resumen -->
+        <!-- Resumen numérico -->
         <div class="panel_stats">
             <div class="stat_card">
                 <span class="stat_icon material-symbols-outlined">home_work</span>
-                <div class="stat_data">
-                    <strong><?= count($propiedades) ?></strong>
-                    <span>Propiedades publicadas</span>
-                </div>
+                <div class="stat_data"><strong><?= count($propiedades) ?></strong><span>Propiedades</span></div>
+            </div>
+            <div class="stat_card">
+                <span class="stat_icon material-symbols-outlined">description</span>
+                <div class="stat_data"><strong><?= $totalSolic ?></strong><span>Solicitudes</span></div>
             </div>
             <div class="stat_card">
                 <span class="stat_icon material-symbols-outlined">vpn_key</span>
-                <div class="stat_data">
-                    <strong><?= count($arriendos) ?></strong>
-                    <span>Arriendos</span>
-                </div>
+                <div class="stat_data"><strong><?= count($arriendos) ?></strong><span>Arriendos</span></div>
             </div>
-            <a href="/propiedades" class="stat_card stat_card_action">
-                <span class="stat_icon material-symbols-outlined">add_home</span>
-                <span>Publicar inmueble</span>
-            </a>
-            <a href="/perfil" class="stat_card stat_card_action">
-                <span class="stat_icon material-symbols-outlined">manage_accounts</span>
-                <span>Configurar perfil</span>
-            </a>
         </div>
 
-        <!-- Mis propiedades (rol propietario) -->
+        <!-- Mis propiedades -->
         <section class="panel_section">
             <div class="panel_section_head">
                 <h2 class="panel_section_title">Mis propiedades</h2>
                 <a href="/propiedades" class="btn_outline btn_sm">Publicar nueva</a>
             </div>
-
             <?php if (empty($propiedades)): ?>
                 <div class="empty_state">
                     <span class="material-symbols-outlined">home_work</span>
@@ -80,7 +69,7 @@ $pendientes = count(array_filter($solicitudesRecibidas, static fn($s) => $s['est
             <?php endif; ?>
         </section>
 
-        <!-- Solicitudes recibidas (rol propietario) -->
+        <!-- Solicitudes recibidas -->
         <?php if (!empty($solicitudesRecibidas)): ?>
         <section class="panel_section">
             <div class="panel_section_head">
@@ -101,7 +90,7 @@ $pendientes = count(array_filter($solicitudesRecibidas, static fn($s) => $s['est
         </section>
         <?php endif; ?>
 
-        <!-- Mis solicitudes (rol inquilino) -->
+        <!-- Mis solicitudes (como inquilino) -->
         <?php if (!empty($solicitudesEnviadas)): ?>
         <section class="panel_section">
             <div class="panel_section_head">
@@ -122,13 +111,12 @@ $pendientes = count(array_filter($solicitudesRecibidas, static fn($s) => $s['est
         </section>
         <?php endif; ?>
 
-        <!-- Mis arriendos (rol inquilino) -->
+        <!-- Mis arriendos -->
         <section class="panel_section">
             <div class="panel_section_head">
                 <h2 class="panel_section_title">Mis arriendos</h2>
-                <a href="/arriendos" class="btn_outline btn_sm">Arriendos</a>
+                <a href="/arriendos" class="btn_outline btn_sm">Buscar arriendos</a>
             </div>
-
             <?php if (empty($arriendos)): ?>
                 <div class="empty_state">
                     <span class="material-symbols-outlined">vpn_key</span>

@@ -114,3 +114,10 @@
     display: flex;
     justify-content: flex-end;
   }
+/* Contenedor del perfil dentro del app shell */
+.perfil_wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 0 80px;
+}
+.avatar_actions strong { display: block; }

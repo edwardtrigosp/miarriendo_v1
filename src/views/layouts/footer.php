@@ -6,6 +6,10 @@
  *   $showFooter bool  Si es false, no se muestra el footer visual (solo cierra tags).
  */
 ?>
+<?php if (!empty($appShell)): ?>
+        </div><!-- .app_main -->
+    </div><!-- .app_shell -->
+<?php endif; ?>
 <?php if (!isset($showFooter) || $showFooter): ?>
 <footer class="footer_main">
     <nav class="footer_links">
