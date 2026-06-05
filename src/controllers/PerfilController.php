@@ -17,8 +17,10 @@ class PerfilController
                 'apellidos' => $u['apellidos'] ?? '',
                 'email'     => $u['email'] ?? '',
                 'telefono'  => $u['telefono'] ?? '',
+                'foto_url'  => $u['foto_url'] ?? '',
             ],
             'exito'   => flash('perfil_ok'),
+            'error'   => flash('perfil_error'),
         ]);
     }
 
@@ -43,6 +45,7 @@ class PerfilController
         }
 
         if ($error !== null) {
+            $actual = Usuario::buscarPorId($id);
             view('perfil', [
                 'title'   => 'Configuración de Perfil | miarriendo.online',
                 'error'   => $error,
@@ -51,6 +54,7 @@ class PerfilController
                     'apellidos' => $apellidos,
                     'email'     => $email,
                     'telefono'  => $telefono,
+                    'foto_url'  => $actual['foto_url'] ?? '',
                 ],
             ]);
             return;
@@ -67,6 +71,64 @@ class PerfilController
         $_SESSION['usuario_nombre'] = $nombre;
 
         flash('perfil_ok', 'Tus datos se guardaron correctamente.');
+        redirect('/perfil');
+    }
+
+    /** Sube (o reemplaza) la foto de perfil del usuario. */
+    public function subirFoto(): void
+    {
+        requiereLogin();
+        $id = (int) $_SESSION['usuario_id'];
+
+        $archivo = $_FILES['foto'] ?? null;
+        if (!$archivo || $archivo['error'] !== UPLOAD_ERR_OK) {
+            flash('perfil_error', 'No se recibió ninguna imagen. Inténtalo de nuevo.');
+            redirect('/perfil');
+        }
+
+        // Tamaño máximo: 3 MB
+        if ($archivo['size'] > 3 * 1024 * 1024) {
+            flash('perfil_error', 'La imagen supera el tamaño máximo de 3 MB.');
+            redirect('/perfil');
+        }
+
+        // Verifica que sea una imagen real y obtén su extensión
+        $extensiones = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG  => 'png',
+            IMAGETYPE_WEBP => 'webp',
+        ];
+        $info = @getimagesize($archivo['tmp_name']);
+        if ($info === false || !isset($extensiones[$info[2]])) {
+            flash('perfil_error', 'Formato no válido. Usa una imagen JPG, PNG o WEBP.');
+            redirect('/perfil');
+        }
+
+        $dir = BASE_PATH . '/public/uploads/usuarios';
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+
+        $ext     = $extensiones[$info[2]];
+        $nombre  = uniqid('user' . $id . '_', true) . '.' . $ext;
+        $destino = $dir . '/' . $nombre;
+
+        if (!move_uploaded_file($archivo['tmp_name'], $destino)) {
+            flash('perfil_error', 'No se pudo guardar la imagen. Inténtalo de nuevo.');
+            redirect('/perfil');
+        }
+
+        // Borra la foto anterior del disco (si existía) para no acumular basura.
+        $previa = Usuario::buscarPorId($id)['foto_url'] ?? '';
+        if ($previa !== '' && str_starts_with($previa, '/uploads/usuarios/')) {
+            @unlink(BASE_PATH . '/public' . $previa);
+        }
+
+        $url = '/uploads/usuarios/' . $nombre;
+        Usuario::actualizarFoto($id, $url);
+        $_SESSION['usuario_foto'] = $url; // disponible para el avatar del sidebar
+
+        flash('perfil_ok', 'Tu foto de perfil se actualizó correctamente.');
         redirect('/perfil');
     }
 }

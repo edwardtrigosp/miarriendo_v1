@@ -38,11 +38,15 @@ class Alquiler
     public static function listarPorInquilino(int $inquilinoId): array
     {
         $sql = "SELECT a.alquiler_id, a.fecha_inicio, a.fecha_fin, a.precio_mensual, a.estado,
-                       p.titulo, c.nombre AS ciudad
+                       p.titulo, c.nombre AS ciudad,
+                       pr.nombre AS propietario_nombre, pr.apellidos AS propietario_apellidos,
+                       co.contrato_id
                 FROM alquileres a
                 JOIN propiedades p ON a.propiedad_id = p.propiedad_id
                 JOIN direcciones d ON p.direccion_id = d.direccion_id
                 JOIN ciudades    c ON d.ciudad_id    = c.ciudad_id
+                JOIN usuarios   pr ON p.propietario_id = pr.usuario_id
+                LEFT JOIN contratos co ON co.alquiler_id = a.alquiler_id
                 WHERE a.inquilino_id = :id
                 ORDER BY a.fecha_inicio DESC";
         $stmt = Database::conexion()->prepare($sql);

@@ -103,6 +103,7 @@ $router->get('/login',       [AuthController::class, 'showLogin']);
 $router->get('/registro',    [AuthController::class, 'showRegistro']);
 $router->get('/perfil',      [PerfilController::class, 'index']);
 $router->post('/perfil/actualizar', [PerfilController::class, 'actualizar']);
+$router->post('/perfil/foto',       [PerfilController::class, 'subirFoto']);
 $router->get('/panel',       [PanelController::class, 'index']);
 $router->get('/blog',        [BlogController::class, 'index']);
 $router->get('/cookies',     [CookiesController::class, 'index']);

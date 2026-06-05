@@ -44,6 +44,37 @@
     text-transform: uppercase;
   }
 
+  /* Indicador: solicitudes por firmar en esta propiedad */
+  .property_badge_solicitudes {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: var(--danger_color);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+  .property_badge_solicitudes .material-symbols-outlined { font-size: 16px; }
+
+  .property_solicitudes_link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--danger_color);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+  .property_solicitudes_link:hover { text-decoration: underline; }
+  .property_solicitudes_link .material-symbols-outlined { font-size: 18px; }
+
   /* Cabecera de la sección de arriendos */
   .section_header {
     margin-top: 40px;
@@ -87,6 +118,7 @@
     border-top: 1px solid var(--border_color);
     padding-top: 16px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
   }
