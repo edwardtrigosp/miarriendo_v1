@@ -18,6 +18,7 @@ require __DIR__ . '/layouts/header.php';
             <?php endif; ?>
 
             <form action="/registro" method="POST" id="registro_form" novalidate>
+                <?= csrf_field() ?>
 
                 <fieldset class="form_fieldset">
                     <legend class="form_legend">Datos personales</legend>

@@ -1,0 +1,5 @@
+# Defensa en profundidad: la carpeta de subidas NUNCA debe ejecutar código.
+php_flag engine off
+<FilesMatch "\.(php|phtml|php[0-9]|phar|cgi|pl|py|asp|aspx|sh)$">
+    Require all denied
+</FilesMatch>

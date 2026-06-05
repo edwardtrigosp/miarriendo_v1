@@ -5,6 +5,35 @@
  */
 class Alquiler
 {
+    /** Crea un alquiler (estado inicial 'pendiente') y devuelve su ID. */
+    public static function crear(array $d): int
+    {
+        $sql = "INSERT INTO alquileres
+                    (propiedad_id, inquilino_id, fecha_inicio, fecha_fin, precio_mensual, deposito, estado)
+                VALUES
+                    (:propiedad_id, :inquilino_id, :fecha_inicio, :fecha_fin, :precio_mensual, :deposito, :estado)";
+        $pdo = Database::conexion();
+        $pdo->prepare($sql)->execute([
+            ':propiedad_id'   => $d['propiedad_id'],
+            ':inquilino_id'   => $d['inquilino_id'],
+            ':fecha_inicio'   => $d['fecha_inicio'],
+            ':fecha_fin'      => $d['fecha_fin'],
+            ':precio_mensual' => $d['precio_mensual'],
+            ':deposito'       => $d['deposito'] ?? null,
+            ':estado'         => $d['estado'] ?? 'pendiente',
+        ]);
+        return (int) $pdo->lastInsertId();
+    }
+
+    /** Cambia el estado de un alquiler. */
+    public static function cambiarEstado(int $alquilerId, string $estado): void
+    {
+        $stmt = Database::conexion()->prepare(
+            "UPDATE alquileres SET estado = :estado WHERE alquiler_id = :id"
+        );
+        $stmt->execute([':estado' => $estado, ':id' => $alquilerId]);
+    }
+
     /** Lista los arriendos de un inquilino, con datos de la propiedad. */
     public static function listarPorInquilino(int $inquilinoId): array
     {

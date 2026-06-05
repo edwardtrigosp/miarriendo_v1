@@ -114,6 +114,7 @@ class PropiedadController
                 'disponible'              => isset($_POST['disponible']) ? 1 : 0,
                 'amueblado'               => isset($_POST['amueblado']) ? 1 : 0,
                 'mascotas_permitidas'     => isset($_POST['mascotas_permitidas']) ? 1 : 0,
+                'clausulas_contrato'      => trim($_POST['clausulas_contrato'] ?? '') ?: null,
             ]);
 
             $pdo->commit();
@@ -244,10 +245,49 @@ class PropiedadController
             return;
         }
 
+        // Vista previa del contrato (plantilla + cláusulas del propietario)
+        $direccion = trim($propiedad['calle'] . ' ' . ($propiedad['numero_exterior'] ?? ''))
+            . (!empty($propiedad['barrio']) ? ', ' . $propiedad['barrio'] : '');
+        $clausulas = ContratoPlantilla::clausulas([
+            'arrendador' => trim($propiedad['propietario_nombre'] . ' ' . $propiedad['propietario_apellidos']),
+            'inmueble'   => $direccion,
+            'ciudad'     => $propiedad['ciudad'],
+            'tipo'       => $propiedad['tipo_propiedad'],
+            'precio'     => $propiedad['precio_alquiler_mensual'],
+            'deposito'   => $propiedad['deposito'],
+            'mascotas'   => $propiedad['mascotas_permitidas'],
+            'amueblado'  => $propiedad['amueblado'],
+            'extra'      => $propiedad['clausulas_contrato'] ?? '',
+        ]);
+
         view('propiedad', [
             'title'     => $propiedad['titulo'] . ' | miarriendo.online',
             'propiedad' => $propiedad,
             'imagenes'  => ImagenPropiedad::porPropiedad((int) $id),
+            'clausulas' => $clausulas,
+        ]);
+    }
+
+    /** Formulario para solicitar el arriendo de una propiedad (Fase 2). */
+    public function solicitar(string $id): void
+    {
+        requiereLogin();
+        $propiedad = Propiedad::buscarPorId((int) $id);
+
+        if ($propiedad === null) {
+            http_response_code(404);
+            view('404', ['title' => 'Propiedad no encontrada | 404']);
+            return;
+        }
+
+        // El dueño no puede arrendarse a sí mismo
+        if ((int) $_SESSION['usuario_id'] === (int) $propiedad['propietario_id']) {
+            redirect('/propiedad/' . (int) $id);
+        }
+
+        view('solicitar_arriendo', [
+            'title'     => 'Solicitar arriendo | miarriendo.online',
+            'propiedad' => $propiedad,
         ]);
     }
 

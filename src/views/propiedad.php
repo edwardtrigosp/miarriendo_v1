@@ -77,6 +77,26 @@ $ubicacion = $direccion
                         <div id="detalle_mapa" class="detalle_mapa"></div>
                     <?php endif; ?>
                 </section>
+
+                <section class="detalle_bloque" id="contrato">
+                    <h2 class="detalle_subtitulo">Contrato de arrendamiento</h2>
+                    <p class="u_text_muted">Este es el contrato que aceptarías al solicitar el arriendo. Incluye las condiciones del propietario.</p>
+                    <div class="contrato_doc">
+                        <h3 class="contrato_doc_titulo">CONTRATO DE ARRENDAMIENTO DE VIVIENDA URBANA</h3>
+                        <p class="contrato_partes">
+                            Entre <strong><?= e(trim($propiedad['propietario_nombre'] . ' ' . $propiedad['propietario_apellidos'])) ?></strong> (EL ARRENDADOR)
+                            y <strong>EL ARRENDATARIO</strong>, se celebra el presente contrato sujeto a las siguientes cláusulas:
+                        </p>
+                        <div class="contrato_clausulas">
+                            <?php foreach ($clausulas as $c): ?>
+                                <div class="contrato_clausula">
+                                    <span class="clausula_titulo"><?= e($c['titulo']) ?></span>
+                                    <p><?= nl2br(e($c['texto'])) ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </section>
             </div>
 
             <!-- Panel lateral (precio + dueño + acciones) -->
@@ -99,8 +119,24 @@ $ubicacion = $direccion
                         </div>
                     </div>
 
-                    <a href="/ruta?id=<?= e($propiedad['propiedad_id']) ?>" class="btn_primary u_full_width">¿Cómo llegar?</a>
-                    <a href="mailto:<?= e($propiedad['propietario_email']) ?>?subject=Interesado en <?= rawurlencode($propiedad['titulo']) ?>" class="btn_outline u_full_width u_mt_sm">Contactar al propietario</a>
+                    <?php
+                    $usuarioId = $_SESSION['usuario_id'] ?? null;
+                    $esDueno   = $usuarioId !== null && (int) $usuarioId === (int) $propiedad['propietario_id'];
+                    ?>
+                    <?php if ($esDueno): ?>
+                        <p class="detalle_nota_dueno"><span class="material-symbols-outlined icon_sm">verified_user</span> Esta es tu propiedad.</p>
+                    <?php elseif ($usuarioId === null): ?>
+                        <a href="/login" class="btn_primary u_full_width">Inicia sesión para solicitar</a>
+                    <?php else: ?>
+                        <a href="/propiedad/<?= e($propiedad['propiedad_id']) ?>/solicitar" class="btn_primary u_full_width">Solicitar arriendo</a>
+                    <?php endif; ?>
+
+                    <a href="/ruta?id=<?= e($propiedad['propiedad_id']) ?>" class="btn_outline u_full_width u_mt_sm">¿Cómo llegar?</a>
+                    <?php if ($usuarioId !== null): ?>
+                        <a href="mailto:<?= e($propiedad['propietario_email']) ?>?subject=Interesado en <?= rawurlencode($propiedad['titulo']) ?>" class="btn_outline u_full_width u_mt_sm">Contactar al propietario</a>
+                    <?php else: ?>
+                        <a href="/login" class="btn_outline u_full_width u_mt_sm">Inicia sesión para contactar</a>
+                    <?php endif; ?>
                 </div>
             </aside>
 

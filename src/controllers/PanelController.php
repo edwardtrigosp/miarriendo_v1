@@ -18,11 +18,17 @@ class PanelController
         // Como inquilino: sus arriendos
         $arriendos = Alquiler::listarPorInquilino($usuarioId);
 
+        // Contratos: solicitudes recibidas (como dueño) y enviadas (como inquilino)
+        $solicitudesRecibidas = Contrato::listarPorPropietario($usuarioId);
+        $solicitudesEnviadas  = Contrato::listarPorInquilino($usuarioId);
+
         view('panel', [
-            'title'        => 'Mi Panel | miarriendo.online',
-            'nombre'       => $_SESSION['usuario_nombre'] ?? '',
-            'propiedades'  => $propiedades,
-            'arriendos'    => $arriendos,
+            'title'                => 'Mi Panel | miarriendo.online',
+            'nombre'               => $_SESSION['usuario_nombre'] ?? '',
+            'propiedades'          => $propiedades,
+            'arriendos'            => $arriendos,
+            'solicitudesRecibidas' => $solicitudesRecibidas,
+            'solicitudesEnviadas'  => $solicitudesEnviadas,
         ]);
     }
 }

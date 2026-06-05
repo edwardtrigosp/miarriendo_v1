@@ -82,6 +82,62 @@ if (!function_exists('requiereAdmin')) {
     }
 }
 
+if (!function_exists('csrf_token')) {
+    /** Devuelve el token CSRF de la sesión (lo genera la primera vez). */
+    function csrf_token(): string
+    {
+        if (empty($_SESSION['_csrf'])) {
+            $_SESSION['_csrf'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['_csrf'];
+    }
+}
+
+if (!function_exists('csrf_field')) {
+    /** Devuelve el <input> oculto con el token CSRF para incrustar en un formulario. */
+    function csrf_field(): string
+    {
+        return '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">';
+    }
+}
+
+if (!function_exists('verificarCsrf')) {
+    /**
+     * Valida el token CSRF de una petición POST. Si no coincide, responde 403 y corta.
+     * Usa hash_equals para evitar ataques de temporización.
+     */
+    function verificarCsrf(): void
+    {
+        $enviado = $_POST['_csrf'] ?? '';
+        if (empty($_SESSION['_csrf']) || !is_string($enviado) || !hash_equals($_SESSION['_csrf'], $enviado)) {
+            http_response_code(403); // Forbidden (token CSRF ausente o inválido)
+            view('error', [
+                'title'   => 'Sesión expirada | miarriendo.online',
+                'codigo'  => '403',
+                'mensaje' => 'Tu sesión expiró o el formulario no es válido. Vuelve atrás e inténtalo de nuevo.',
+            ]);
+            exit;
+        }
+    }
+}
+
+if (!function_exists('flash')) {
+    /**
+     * Mensaje "flash" de un solo uso (se borra al leerlo). Útil tras un redirect.
+     * Sin argumento de valor: lee y limpia. Con valor: guarda.
+     */
+    function flash(string $clave, ?string $valor = null): ?string
+    {
+        if ($valor !== null) {
+            $_SESSION['_flash'][$clave] = $valor;
+            return null;
+        }
+        $msg = $_SESSION['_flash'][$clave] ?? null;
+        unset($_SESSION['_flash'][$clave]);
+        return $msg;
+    }
+}
+
 if (!function_exists('env')) {
     /**
      * Lee una variable de configuración.
