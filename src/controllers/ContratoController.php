@@ -130,6 +130,7 @@ class ContratoController
             'title'    => 'Contrato | miarriendo.online',
             'contrato' => $contrato,
             'esDueno'  => $usuarioId === (int) $contrato['propietario_id'],
+            'exito'    => flash('contrato_firmado'),
         ]);
     }
 
@@ -158,6 +159,98 @@ class ContratoController
             Alquiler::cambiarEstado((int) $contrato['alquiler_id'], 'cancelado');
         }
         redirect('/contrato/' . (int) $id);
+    }
+
+    /** Muestra el formulario de firma al inquilino (solo si el contrato está 'enviado'). */
+    public function firmarForm(string $id): void
+    {
+        $contrato = $this->soloInquilinoFirmable((int) $id);
+        if ($contrato === null) {
+            return;
+        }
+        view('firmar_contrato', [
+            'title'    => 'Firmar contrato | miarriendo.online',
+            'contrato' => $contrato,
+        ]);
+    }
+
+    /** Procesa la firma del inquilino: acepta el contrato y activa el arriendo. */
+    public function firmar(string $id): void
+    {
+        $contrato = $this->soloInquilinoFirmable((int) $id);
+        if ($contrato === null) {
+            return;
+        }
+
+        $acepto = isset($_POST['acepto']);
+        $firma  = trim($_POST['firma'] ?? '');
+
+        $error = null;
+        if (!$acepto) {
+            $error = 'Debes marcar la casilla "Acepto las condiciones del contrato".';
+        } elseif (mb_strlen($firma) < 5) {
+            $error = 'Escribe tu nombre completo como firma.';
+        }
+
+        if ($error !== null) {
+            view('firmar_contrato', [
+                'title'    => 'Firmar contrato | miarriendo.online',
+                'contrato' => $contrato,
+                'error'    => $error,
+            ]);
+            return;
+        }
+
+        $ip   = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $hash = hash('sha256', (string) $contrato['clausulas']);
+
+        $pdo = Database::conexion();
+        $pdo->beginTransaction();
+        try {
+            Contrato::firmar((int) $id, $firma, $ip, $hash);
+            Alquiler::cambiarEstado((int) $contrato['alquiler_id'], 'activo');
+            // El inmueble queda ocupado y se cancelan las otras solicitudes vivas.
+            Propiedad::cambiarDisponibilidad((int) $contrato['propiedad_id'], 0);
+            Contrato::rechazarOtras((int) $contrato['propiedad_id'], (int) $id);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            view('firmar_contrato', [
+                'title'    => 'Firmar contrato | miarriendo.online',
+                'contrato' => $contrato,
+                'error'    => 'No se pudo registrar la firma. Intenta de nuevo.',
+            ]);
+            return;
+        }
+
+        flash('contrato_firmado', 'Contrato firmado correctamente. ¡El arriendo está activo!');
+        redirect('/contrato/' . (int) $id);
+    }
+
+    /**
+     * Carga el contrato y verifica que el usuario sea el inquilino y que el
+     * contrato esté 'enviado' (aprobado por el dueño, listo para firmar).
+     * Devuelve el contrato o null (ya respondió 403/404 o redirigió).
+     */
+    private function soloInquilinoFirmable(int $id): ?array
+    {
+        requiereLogin();
+        $contrato = Contrato::buscarPorId($id);
+
+        if ($contrato === null) {
+            http_response_code(404);
+            view('404', ['title' => 'Contrato no encontrado | 404']);
+            return null;
+        }
+        if ((int) $_SESSION['usuario_id'] !== (int) $contrato['inquilino_id']) {
+            http_response_code(403);
+            view('error', ['title' => 'Sin acceso | 403', 'codigo' => '403', 'mensaje' => 'No tienes acceso a este contrato.']);
+            return null;
+        }
+        if ($contrato['estado'] !== 'enviado') {
+            redirect('/contrato/' . $id); // no es firmable en su estado actual
+        }
+        return $contrato;
     }
 
     /**

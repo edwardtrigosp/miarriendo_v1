@@ -47,6 +47,42 @@ class Contrato
     }
 
     /**
+     * Registra la firma del inquilino: marca el contrato como aceptado y guarda
+     * el rastro legal (nombre firmado, IP y hash SHA-256 del clausulado).
+     */
+    public static function firmar(int $contratoId, string $firma, string $ip, string $hash): void
+    {
+        $sql = "UPDATE contratos
+                   SET estado = 'aceptado', aceptado = 1, fecha_aceptacion = NOW(),
+                       firma_inquilino = :firma, ip_aceptacion = :ip, hash_documento = :hash
+                 WHERE contrato_id = :id";
+        Database::conexion()->prepare($sql)->execute([
+            ':firma' => $firma,
+            ':ip'    => $ip,
+            ':hash'  => $hash,
+            ':id'    => $contratoId,
+        ]);
+    }
+
+    /**
+     * Al firmarse un contrato, cancela las demás solicitudes vivas de la misma
+     * propiedad (otros inquilinos que esperaban): contrato->rechazado, alquiler->cancelado.
+     */
+    public static function rechazarOtras(int $propiedadId, int $exceptoContratoId): void
+    {
+        $sql = "UPDATE contratos c
+                JOIN alquileres a ON c.alquiler_id = a.alquiler_id
+                   SET c.estado = 'rechazado', a.estado = 'cancelado'
+                 WHERE a.propiedad_id = :prop
+                   AND c.contrato_id <> :excepto
+                   AND c.estado IN ('borrador','enviado')";
+        Database::conexion()->prepare($sql)->execute([
+            ':prop'    => $propiedadId,
+            ':excepto' => $exceptoContratoId,
+        ]);
+    }
+
+    /**
      * ¿El inquilino ya tiene una solicitud viva (no rechazada/anulada) para esta propiedad?
      * Evita solicitudes duplicadas.
      */

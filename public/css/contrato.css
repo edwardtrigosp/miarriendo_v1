@@ -117,3 +117,36 @@
         position: static;
     }
 }
+
+/* ---- Formulario de firma ---- */
+.firma_form {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: var(--border_radius);
+    box-shadow: var(--shadow_sm);
+    padding: 28px;
+    margin-top: 24px;
+}
+.firma_titulo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.firma_check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background-color: var(--bg_color);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    cursor: pointer;
+    line-height: 1.5;
+}
+.firma_check input {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--primary_color);
+}
