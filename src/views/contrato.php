@@ -26,8 +26,17 @@ $money = static fn($v) => '$' . number_format((float) $v, 0, ',', '.');
                     <h1 class="page_title">Contrato de arrendamiento</h1>
                     <p class="u_text_muted"><?= e($contrato['propiedad_titulo']) ?></p>
                 </div>
-                <span class="contrato_estado_badge <?= e($estadoClase) ?>"><?= e($estadoTexto) ?></span>
+                <div class="contrato_cabecera_acciones">
+                    <span class="contrato_estado_badge <?= e($estadoClase) ?>"><?= e($estadoTexto) ?></span>
+                    <a href="/contrato/<?= e($contrato['contrato_id']) ?>/pdf" class="btn_outline btn_sm">
+                        <span class="material-symbols-outlined icon_sm">picture_as_pdf</span> Descargar PDF
+                    </a>
+                </div>
             </header>
+
+            <?php if (!empty($exito)): ?>
+                <p class="form_success" role="status"><?= e($exito) ?></p>
+            <?php endif; ?>
 
             <!-- Datos clave -->
             <div class="contrato_meta">
@@ -73,7 +82,8 @@ $money = static fn($v) => '$' . number_format((float) $v, 0, ',', '.');
                 <?php elseif (!$esDueno && $contrato['estado'] === 'borrador'): ?>
                     <p class="u_text_muted">Tu solicitud está pendiente de aprobación del propietario.</p>
                 <?php elseif (!$esDueno && $contrato['estado'] === 'enviado'): ?>
-                    <p class="u_text_muted">El propietario aprobó tu solicitud. <strong>Pronto podrás firmar el contrato.</strong></p>
+                    <p class="u_text_muted">El propietario aprobó tu solicitud. Ya puedes firmar el contrato.</p>
+                    <a href="/contrato/<?= e($contrato['contrato_id']) ?>/firmar" class="btn_primary">Firmar contrato</a>
                 <?php elseif ($contrato['estado'] === 'rechazado'): ?>
                     <p class="u_text_muted">Esta solicitud fue rechazada.</p>
                 <?php endif; ?>

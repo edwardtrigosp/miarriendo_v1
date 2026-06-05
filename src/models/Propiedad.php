@@ -132,6 +132,15 @@ class Propiedad
         return $stmt->fetchAll();
     }
 
+    /** Marca una propiedad como disponible (1) o no disponible (0). */
+    public static function cambiarDisponibilidad(int $id, int $disponible): void
+    {
+        $stmt = Database::conexion()->prepare(
+            "UPDATE propiedades SET disponible = :d WHERE propiedad_id = :id"
+        );
+        $stmt->execute([':d' => $disponible, ':id' => $id]);
+    }
+
     /** Busca una propiedad por su ID con todos sus detalles. Devuelve null si no existe. */
     public static function buscarPorId(int $id): ?array
     {
