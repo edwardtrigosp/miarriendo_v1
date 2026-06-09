@@ -131,7 +131,23 @@ class PropiedadController
         // Las imágenes se procesan fuera de la transacción (mover archivos no es transaccional)
         $this->procesarImagenes($propiedadId);
 
-        redirect('/arriendos');
+        flash('publicado', $titulo);
+        redirect('/propiedades/exito');
+    }
+
+    /** Pantalla de confirmación tras publicar una propiedad. */
+    public function exito(): void
+    {
+        requiereLogin();
+        $titulo = flash('publicado');
+        if ($titulo === null) {
+            // Acceso directo sin haber publicado: a la lista de propiedades.
+            redirect('/panel?ver=mis-propiedades');
+        }
+        view('publicado', [
+            'title'  => 'Propiedad publicada | miarriendo.online',
+            'titulo' => $titulo,
+        ]);
     }
 
     /**
@@ -375,7 +391,7 @@ class PropiedadController
         }
         Propiedad::archivar((int) $id);
         flash('panel_ok', 'La propiedad "' . $propiedad['titulo'] . '" fue eliminada.');
-        redirect('/panel');
+        redirect('/panel?ver=mis-propiedades');
     }
 
     /** Añade fotos a una propiedad existente (solo el dueño). */

@@ -17,6 +17,14 @@ $styles = $styles ?? [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($title) ?></title>
 
+    <!-- Favicon de marca (casita morada). SVG escala nítido en cualquier pantalla. -->
+<?php
+    $favRuta = BASE_PATH . '/public/favicon.svg';
+    $favVer  = is_file($favRuta) ? '?v=' . filemtime($favRuta) : '';
+?>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg<?= $favVer ?>">
+    <link rel="apple-touch-icon" href="/favicon.svg<?= $favVer ?>">
+
     <!-- Iconos Material Symbols de Google (Apache 2.0, gratis) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

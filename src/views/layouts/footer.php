@@ -40,6 +40,19 @@ ob_start();
         <button type="button" id="cookie_accept" class="btn_primary btn_sm">Aceptar</button>
     </div>
 </div>
+<!-- Modal de confirmación global (reemplaza el confirm() del navegador) -->
+<div class="modal_overlay" id="confirm_modal" hidden>
+    <div class="modal_box" role="dialog" aria-modal="true" aria-labelledby="confirm_modal_title">
+        <h3 class="modal_title" id="confirm_modal_title">Confirmar</h3>
+        <p class="modal_text" id="confirm_modal_text"></p>
+        <div class="modal_actions">
+            <button type="button" class="btn_outline" data-confirm-cancel>Cancelar</button>
+            <button type="button" class="btn_danger" data-confirm-ok>Aceptar</button>
+        </div>
+    </div>
+</div>
+
 <script src="/js/cookies.js"></script>
+<script src="/js/confirm.js"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 .env
 
+# Semilla de producción: contiene credenciales del admin, no versionar
+/database/seed_prod.sql
+
 # Configuración local de herramientas (agente/IDE), no versionar
 /.claude/
 

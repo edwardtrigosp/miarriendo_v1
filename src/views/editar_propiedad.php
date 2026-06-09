@@ -143,7 +143,7 @@ $tipos = ['Apartamento', 'Casa', 'Apartaestudio', 'Habitación', 'Local'];
                                 <?php if ((int) $img['es_principal'] === 1): ?>
                                     <span class="foto_portada">Portada</span>
                                 <?php endif; ?>
-                                <form action="/propiedad/<?= e($p['propiedad_id']) ?>/foto/<?= e($img['imagen_id']) ?>/eliminar" method="POST" onsubmit="return confirm('¿Eliminar esta foto?');">
+                                <form action="/propiedad/<?= e($p['propiedad_id']) ?>/foto/<?= e($img['imagen_id']) ?>/eliminar" method="POST" data-confirm="Esta foto se quitará de la propiedad." data-confirm-title="¿Eliminar esta foto?" data-confirm-ok="Eliminar">
                                     <?= csrf_field() ?>
                                     <button type="submit" class="foto_eliminar" title="Eliminar foto">
                                         <span class="material-symbols-outlined icon_sm">delete</span>

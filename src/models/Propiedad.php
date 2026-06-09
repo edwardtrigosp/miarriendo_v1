@@ -45,6 +45,7 @@ class Propiedad
         $extra = $columnaExtra !== '' ? ', ' . $columnaExtra : '';
         return "SELECT
                     p.propiedad_id, p.titulo, p.precio_alquiler_mensual, p.tipo_propiedad,
+                    p.num_habitaciones, p.num_banos, p.area_m2,
                     p.disponible, d.calle, d.numero_exterior, d.latitud, d.longitud,
                     c.nombre AS ciudad, c.departamento_id,
                     (SELECT ip.url_imagen FROM imagenes_propiedades ip
@@ -213,6 +214,11 @@ class Propiedad
             'titulo'    => $p['titulo'],
             'precio'    => $p['precio_alquiler_mensual'],
             'direccion' => $direccion,
+            'ciudad'    => $p['ciudad'] ?? '',
+            'tipo'      => $p['tipo_propiedad'] ?? '',
+            'habitaciones' => $p['num_habitaciones'] ?? null,
+            'banos'     => $p['num_banos'] ?? null,
+            'area'      => $p['area_m2'] ?? null,
             'imagen'    => $p['imagen'] ?: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=500&q=80',
             'estado'    => ((int) $p['disponible'] === 1) ? 'Disponible' : 'No disponible',
             'distancia' => $distancia,

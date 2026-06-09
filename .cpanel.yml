@@ -1,0 +1,16 @@
+---
+# Despliegue automático de cPanel (Git Version Control).
+# Al pulsar "Deploy HEAD Commit", cPanel copia el código al directorio público.
+#
+# El repositorio se clona FUERA de public_html (sin exponer .git); estas tareas
+# copian solo lo necesario al directorio que sirve el sitio.
+#
+# IMPORTANTE: usa cp (no borra), así NUNCA elimina el .env del servidor ni las
+# imágenes subidas por usuarios en public/uploads/.
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/drappsco/public_html/expoingtech/20261/miarriendo
+    - /bin/cp -RT public "$DEPLOYPATH/public"
+    - /bin/cp -RT src "$DEPLOYPATH/src"
+    - /bin/cp -RT database "$DEPLOYPATH/database"
+    - /bin/cp -f .htaccess "$DEPLOYPATH/.htaccess"

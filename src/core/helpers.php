@@ -38,6 +38,13 @@ if (!function_exists('redirect')) {
     /** Redirige a otra ruta y detiene la ejecución. */
     function redirect(string $path): void
     {
+        // Despliegue en subcarpeta: anteponer BASE_URL a las rutas internas
+        // ("/..."), sin tocar URLs externas (http...) ni las ya prefijadas.
+        $base = defined('BASE_URL') ? BASE_URL : '';
+        if ($base !== '' && isset($path[0]) && $path[0] === '/'
+            && !str_starts_with($path, $base . '/') && $path !== $base) {
+            $path = $base . $path;
+        }
         header('Location: ' . $path);
         exit;
     }

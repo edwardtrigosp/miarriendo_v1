@@ -31,8 +31,15 @@ class Router
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $uri    = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-        $path   = $this->normalize($uri);
+        $uri    = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+
+        // Despliegue en subcarpeta: quitar el prefijo BASE_URL antes de enrutar.
+        $base = defined('BASE_URL') ? BASE_URL : '';
+        if ($base !== '' && str_starts_with($uri, $base)) {
+            $uri = substr($uri, strlen($base));
+        }
+
+        $path = $this->normalize($uri === '' ? '/' : $uri);
 
         foreach ($this->routes[$method] ?? [] as [$regex, $handler]) {
             if (preg_match($regex, $path, $coincidencias)) {

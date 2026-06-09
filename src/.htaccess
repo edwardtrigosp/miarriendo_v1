@@ -1,0 +1,9 @@
+# Código de la aplicación: NUNCA debe servirse por web.
+# Se incluye desde PHP por sistema de archivos, no por HTTP.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

@@ -1,9 +1,70 @@
 .properties_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-    padding: 40px 0;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 8px 0 0;
   }
+
+  /* ---- Tarjeta de propiedad minimalista (estilo Airbnb) ---- */
+  .pc { display: block; text-decoration: none; color: inherit; }
+  .pc_img {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+  }
+  .pc_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .pc:hover .pc_img img { transform: scale(1.04); }
+  .pc_estado {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(255, 255, 255, 0.92);
+    color: var(--text_main);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+  .pc_estado.is_off { background-color: var(--primary_color); color: #ffffff; }
+  .pc_solic {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: var(--danger_color);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 5px 9px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  .pc_solic .material-symbols-outlined { font-size: 15px; }
+  .pc_body { padding: 12px 4px 0; }
+  .pc_title { font-size: 1rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pc_price { color: var(--text_main); margin-top: 2px; }
+  .pc_price strong { color: var(--primary_color); }
+  .pc_meta {
+    color: var(--text_muted);
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .pc_meta .material-symbols-outlined { font-size: 16px; vertical-align: -3px; }
   
   .property_card {
     background-color: var(--surface_color);

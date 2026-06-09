@@ -2,7 +2,7 @@
    Panel principal (dashboard del usuario) — layout de dos columnas
    ================================================================ */
 .panel_wrap {
-    padding-top: 40px;
+    padding-top: 0;       /* la banda del topbar (110px) ya da el offset superior */
     padding-bottom: 80px;
 }
 .panel_header {
@@ -263,7 +263,7 @@
 
 .side_card {
     position: sticky;
-    top: 110px; /* = topbar (70px) + padding-top del panel (40px): se fija sin moverse */
+    top: 76px; /* = altura de la banda superior: se fija sin moverse bajo el topbar */
     background-color: var(--surface_color);
     border: 1px solid var(--border_color);
     border-radius: 14px;

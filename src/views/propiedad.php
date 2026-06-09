@@ -129,7 +129,9 @@ $ubicacion = $direccion
                     <?php if ($esDueno): ?>
                         <p class="detalle_nota_dueno"><span class="material-symbols-outlined icon_sm">verified_user</span> Esta es tu propiedad.</p>
                         <a href="/propiedad/<?= e($propiedad['propiedad_id']) ?>/editar" class="btn_primary u_full_width">Editar propiedad</a>
-                        <form action="/propiedad/<?= e($propiedad['propiedad_id']) ?>/eliminar" method="POST" class="u_mt_sm" onsubmit="return confirm('¿Eliminar esta propiedad? Dejará de aparecer en la plataforma.');">
+                        <form action="/propiedad/<?= e($propiedad['propiedad_id']) ?>/eliminar" method="POST" class="u_mt_sm"
+                              data-confirm="Dejará de aparecer en la plataforma. Esta acción no se puede deshacer."
+                              data-confirm-title="¿Eliminar esta propiedad?" data-confirm-ok="Eliminar">
                             <?= csrf_field() ?>
                             <button type="submit" class="btn_outline btn_danger u_full_width">Eliminar propiedad</button>
                         </form>

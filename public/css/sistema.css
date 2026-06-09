@@ -1,0 +1,215 @@
+/* ================================================================
+   Sistema de diseño (styleguide) — SOLO el layout de esta página.
+   No redefine componentes: estos se ven con su CSS real (global/panel/
+   arriendos). Aquí solo viven las clases .sg_* de presentación.
+   ================================================================ */
+.sg_wrap {
+    padding-top: 0;
+    padding-bottom: 80px;
+}
+
+/* Encabezado de la página */
+.sg_hero {
+    margin-bottom: 36px;
+}
+.sg_hero h1 {
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+.sg_hero p {
+    color: var(--text_muted);
+    max-width: 640px;
+    line-height: 1.6;
+}
+
+/* Dos columnas: índice fijo + contenido */
+.sg_layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* Índice (tabla de contenidos) */
+.sg_toc {
+    position: sticky;
+    top: 76px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.sg_toc_title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text_muted);
+    padding: 0 12px;
+    margin-bottom: 8px;
+}
+.sg_toc a {
+    display: block;
+    padding: 7px 12px;
+    border-radius: 8px;
+    color: var(--text_muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+.sg_toc a:hover {
+    background-color: var(--purple_100);
+    color: var(--primary_color);
+}
+
+/* Bloques de sección */
+.sg_section {
+    margin-bottom: 56px;
+    scroll-margin-top: 120px; /* para que el ancla no quede bajo el topbar */
+}
+.sg_section_head {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border_color);
+}
+.sg_section_head h2 {
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+}
+.sg_section_head p {
+    color: var(--text_muted);
+    font-size: 0.92rem;
+    margin-top: 4px;
+}
+
+/* Tarjeta-demo: enmarca cada componente con su etiqueta de clase */
+.sg_demo {
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 16px;
+}
+.sg_demo_row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+.sg_demo + .sg_label,
+.sg_label {
+    display: block;
+    margin-top: -6px;
+    margin-bottom: 24px;
+    font-size: 0.78rem;
+    color: var(--text_muted);
+}
+.sg_label code {
+    background-color: var(--purple_50);
+    color: var(--primary_color);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-size: 0.78rem;
+}
+
+/* --- Tokens de color (swatches) --- */
+.sg_swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+}
+.sg_swatch {
+    border: 1px solid var(--border_color);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--surface_color);
+}
+.sg_swatch_color {
+    height: 72px;
+    border-bottom: 1px solid var(--border_color);
+}
+.sg_swatch_meta {
+    padding: 10px 12px;
+}
+.sg_swatch_name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: block;
+}
+.sg_swatch_var {
+    font-size: 0.72rem;
+    color: var(--text_muted);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+.sg_swatch_hex {
+    font-size: 0.72rem;
+    color: var(--text_muted);
+    text-transform: uppercase;
+}
+
+/* --- Tipografía --- */
+.sg_type_row {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border_color);
+}
+.sg_type_row:last-child { border-bottom: none; }
+.sg_type_tag {
+    flex-shrink: 0;
+    width: 130px;
+    font-size: 0.76rem;
+    color: var(--text_muted);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+/* --- Iconos --- */
+.sg_icons {
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+.sg_icon_demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary_color);
+}
+.sg_icon_demo span:last-child {
+    font-size: 0.72rem;
+    color: var(--text_muted);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+/* --- Sombras / radios --- */
+.sg_tokens_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 18px;
+}
+.sg_token_box {
+    height: 90px;
+    border-radius: var(--border_radius);
+    background-color: var(--surface_color);
+    border: 1px solid var(--border_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    color: var(--text_muted);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    text-align: center;
+}
+
+/* Caja de demo angosta para componentes que viven en una columna estrecha */
+.sg_narrow { max-width: 360px; }
+
+@media (max-width: 860px) {
+    .sg_layout { grid-template-columns: 1fr; }
+    .sg_toc { display: none; }
+}

@@ -3,38 +3,43 @@
 
 :root {
 
-  /* Colores de marca y acción (morado corporativo) */
+  /* Colores de marca (morado #8917D4) */
   --primary_color: #8917D4;   /* Color principal: logo y botones primarios */
-  --primary_hover: #7412B5;   /* Variante más oscura para hover */
-  --accent_color:  #F4E7FF;   /* Morado muy claro para fondos sutiles (badges/estados) */
+  --primary_hover: #7A12BE;   /* Hover: un paso más oscuro y saturado */
+  --accent_color:  #F3E7FD;   /* = purple_100, fondos sutiles (badges/estados) */
 
-  /* Paleta de morados derivada del color principal (#8917D4) */
-  --purple_50:  #F4ECFC;      /* casi blanco con tinte morado */
-  --purple_100: #EDDCF9;      /* morado muy suave (hover de menús) */
-  --purple_200: #DBB9F2;
-  --purple_300: #C48BE9;
-  --purple_400: #AC5DE1;
+  /* Escala tonal del morado — uniforme, derivada de #8917D4 (= 500) */
+  --purple_50:  #FAF5FE;      /* casi blanco con tinte morado (fondos suaves) */
+  --purple_100: #F3E7FD;      /* morado muy suave (hover de menús) */
+  --purple_200: #E7CEFB;
+  --purple_300: #D2A8F4;
+  --purple_400: #B566E9;
   --purple_500: #8917D4;      /* = primary */
-  --purple_600: #7414B4;
-  --purple_700: #601094;
+  --purple_600: #7A12BE;
+  --purple_700: #62109A;
   --purple_800: #4B0D75;
-  --purple_900: #360954;
+  --purple_900: #350955;
 
-  /* Fondos y superficies (tema claro) */
-  --bg_color:      #F5F5F5;   /* Fondo general de la página */
-  --surface_color: #FFFFFF;   /* Fondo de tarjetas, nav y superficies elevadas */
+  /* Neutros con un leve tinte morado para armonizar con la marca (tema claro) */
+  --bg_color:      #F7F6FB;   /* Fondo general (gris muy claro, tinte morado) */
+  --surface_color: #FFFFFF;   /* Tarjetas, nav y superficies elevadas */
+  --surface_2:     #F2F0F8;   /* Contenedor sutil (zonas, hovers, rellenos) */
 
   /* Tipografía y bordes */
-  --text_main:    #1E2229;    /* Texto principal (títulos) */
-  --text_muted:   #8B96A8;    /* Texto secundario (descripciones, menús inactivos) */
-  --border_color: #E5E7EB;    /* Líneas divisorias suaves */
-  --danger_color: #EF4444;    /* Errores y acciones destructivas */
+  --text_main:    #1C1726;    /* Texto principal (casi negro, matiz morado) */
+  --text_muted:   #6E6A7C;    /* Texto secundario (gris morado, buen contraste) */
+  --border_color: #E8E4F0;    /* Líneas divisorias suaves (con tinte) */
+
+  /* Estado */
+  --danger_color:  #E5484D;   /* Errores y acciones destructivas */
+  --success_color: #1F9254;   /* Éxito / confirmaciones */
+  --warning_color: #C77700;   /* Advertencias */
 
   /* Constantes de estructura */
   --font_family: 'Inter', sans-serif;
   --border_radius: 10px;
-  --shadow_sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
-  --shadow_md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow_sm: 0 1px 2px rgba(53, 9, 84, 0.06), 0 1px 3px rgba(53, 9, 84, 0.08);
+  --shadow_md: 0 6px 16px rgba(53, 9, 84, 0.08), 0 2px 6px rgba(53, 9, 84, 0.05);
 }
 
 /* Reseteo CSS global */
@@ -390,7 +395,7 @@ body {
     gap: 0;
 }
 .app_brand {
-    height: 70px;            /* misma banda que el topbar: alinea la marca con el avatar */
+    height: 76px;            /* misma banda que el topbar: marca y avatar centrados al mismo nivel */
     display: flex;
     align-items: center;
     font-size: 1.5rem;
@@ -399,6 +404,55 @@ body {
     text-decoration: none;
     letter-spacing: -0.02em;
     padding: 0 8px;
+}
+
+/* Switch de modo en el sidebar: casa = arrendar (propiedades), llave = buscar (arriendos) */
+.role_switch {
+    position: relative;
+    display: flex;
+    gap: 0;
+    padding: 5px;
+    margin: 0 4px 14px;
+    background-color: var(--surface_color);   /* fondo blanco */
+    border: 1px solid var(--border_color);
+    border-radius: 999px;                     /* píldora, igual que el perfil/avatar */
+}
+/* Píldora morada que se desliza bajo el botón activo (animación del switch) */
+.role_switch::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    bottom: 5px;
+    width: calc((100% - 10px) / 2);           /* ancho de un botón (sin el padding) */
+    background-color: var(--primary_color);
+    border-radius: 999px;
+    z-index: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* leve rebote */
+}
+/* Cuando el botón activo es el segundo (llave), la píldora se desliza a la derecha */
+.role_switch:has(.role_switch_btn:last-child.is_active)::before {
+    transform: translateX(100%);
+}
+.role_switch_btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    border: none;
+    border-radius: 999px;   /* píldora, igual que el perfil/avatar */
+    background: transparent;
+    color: var(--primary_color);
+    cursor: pointer;
+    position: relative;      /* por encima de la píldora deslizante */
+    z-index: 1;
+    transition: color 0.25s ease;
+}
+.role_switch_btn .material-symbols-outlined { font-size: 22px; }
+.role_switch_btn:not(.is_active):hover { color: var(--primary_hover); } /* hover sobre el inactivo */
+.role_switch_btn.is_active {
+    color: #ffffff;          /* el fondo lo da la píldora deslizante (::before) */
 }
 
 .app_profile {
@@ -442,7 +496,20 @@ body {
     flex-direction: column;
     gap: 10px;
 }
-.app_nav_top { margin-top: 40px; } /* = padding-top del contenido: alinea "Inicio" con el tope de las tarjetas */
+.app_nav_top { margin-top: 0; }
+/* Las dos secciones de modo se superponen en la misma celda: el alto siempre
+   es el del modo más alto, así "General" no salta al cambiar de modo. */
+.app_nav_modes { display: grid; }
+.app_nav_modes > [data-mode-panel] {
+    grid-area: 1 / 1;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.app_nav_modes > [data-mode-panel][hidden] { visibility: hidden; } /* ocupa espacio pero no se ve */
+/* "General" fluye justo debajo del menú (posición fija) */
+.app_nav_general { display: flex; flex-direction: column; gap: 10px; }
 .app_nav_bottom {
     margin-top: auto;
     padding-top: 8px;
@@ -500,10 +567,11 @@ body {
     position: sticky;
     top: 0;
     z-index: 20;
+    height: 76px; /* banda superior completa: marca/avatar centrados y contenido oculto a este nivel */
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 12px 24px;
+    padding: 0 24px;
     background-color: var(--bg_color); /* mismo fondo: el contenido pasa por debajo sin corte */
 }
 
@@ -597,33 +665,130 @@ body {
 .user_menu_logout { color: var(--danger_color); }
 .user_menu_logout:hover { background-color: #FEECEC; color: var(--danger_color); }
 
-/* Responsive: el menú lateral pasa a barra superior */
+/* ----- Menú móvil (drawer): controles ocultos en escritorio ----- */
+.app_topbar { justify-content: space-between; }
+.app_topbar_left { display: flex; align-items: center; gap: 6px; }
+.app_menu_toggle {
+    display: none;               /* solo móvil */
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    color: var(--text_main);
+    cursor: pointer;
+}
+.app_menu_toggle:hover { background-color: var(--purple_100); color: var(--primary_color); }
+.app_topbar_brand {
+    display: none;               /* solo móvil (en escritorio la marca vive en el sidebar) */
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--primary_color);
+    text-decoration: none;
+}
+.app_sidebar_head { display: flex; align-items: center; justify-content: space-between; }
+.app_menu_close {
+    display: none;               /* solo móvil */
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    color: var(--text_muted);
+    cursor: pointer;
+}
+.app_menu_close:hover { background-color: var(--purple_100); color: var(--primary_color); }
+.app_overlay { display: none; }
+
+/* ===== En móvil: el sidebar se vuelve un cajón deslizante ===== */
 @media (max-width: 860px) {
-    .app_shell { flex-direction: column; }
+    .app_topbar { height: 64px; padding: 0 12px; }
+    .app_menu_toggle,
+    .app_topbar_brand,
+    .app_menu_close { display: inline-flex; }
+
     .app_sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 4px;
-        border-right: none;
-        border-bottom: 1px solid var(--border_color);
-        padding: 12px 16px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        max-width: 84vw;
+        height: 100vh;
+        z-index: 60;
+        background-color: var(--surface_color);
+        box-shadow: var(--shadow_md);
+        padding: 12px 14px;
+        transform: translateX(-100%);
+        transition: transform 0.28s ease;
+        overflow-y: auto;
     }
-    .app_brand { height: auto; padding: 0 12px 0 0; }
-    .app_nav_top { margin-top: 0; }
-    .app_profile {
-        border: none;
-        margin: 0 auto 0 0;
-        padding: 0;
-        order: 3;
+    .app_sidebar.is_open { transform: translateX(0); }
+    .app_brand { height: 56px; }  /* dentro del cajón, más compacto */
+
+    .app_overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 55;
+        background-color: rgba(28, 23, 38, 0.45);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.28s ease, visibility 0.28s ease;
     }
-    .app_nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    .app_nav_bottom { margin-top: 0; border-top: none; }
-    .app_nav_link span:not(.material-symbols-outlined) { display: none; } /* solo iconos en móvil */
+    .app_overlay.is_open { opacity: 1; visibility: visible; }
+
+    body.app_menu_open { overflow: hidden; } /* bloquea el scroll del fondo */
+}
+
+/* ================================================================
+   Modal de confirmación propio (reemplaza confirm() del navegador)
+   ================================================================ */
+.modal_overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.45);
+    animation: modal_fade 0.15s ease;
+}
+.modal_overlay[hidden] { display: none; }
+
+.modal_box {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--surface_color);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    padding: 28px;
+    animation: modal_in 0.16s ease;
+}
+.modal_title { font-size: 1.2rem; font-weight: 700; color: var(--text_main); margin-bottom: 8px; }
+.modal_text { color: var(--text_muted); line-height: 1.5; margin-bottom: 24px; }
+.modal_actions { display: flex; justify-content: flex-end; gap: 10px; }
+/* Botón de confirmación destructiva (sólido) dentro del modal */
+.modal_actions .btn_danger {
+    padding: 12px 24px;
+    border: 1px solid var(--danger_color);
+    border-radius: var(--border_radius);
+    background-color: var(--danger_color);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.modal_actions .btn_danger:hover { background-color: #c81e1e; color: #ffffff; }
+
+@keyframes modal_fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal_in {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
 }

@@ -475,10 +475,10 @@ select.form_input {
     grid-template-columns: 1fr 320px; /* estándar (antes 340px) */
     gap: 28px;                        /* estándar (antes 48px) */
     max-width: 1200px;                /* igual que main_container */
-    padding-top: 40px;                /* = panel_wrap, para alinear el sticky */
+    padding-top: 0;                   /* la banda del topbar (110px) ya da el offset */
 }
 .wizard_app .progress_panel {
-    top: 110px;          /* = topbar (70px) + 40px: fijo sin moverse */
+    top: 76px;           /* = altura de la banda superior: fijo sin moverse */
     padding: 24px;       /* estándar */
     border-radius: 14px; /* estándar */
 }

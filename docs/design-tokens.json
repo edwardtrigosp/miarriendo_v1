@@ -1,0 +1,88 @@
+{
+  "global": {
+    "color": {
+      "primary": { "value": "#8917D4", "type": "color", "description": "Color principal: logo y botones primarios" },
+      "primaryHover": { "value": "#7A12BE", "type": "color", "description": "Hover: un paso mas oscuro y saturado" },
+      "accent": { "value": "#F3E7FD", "type": "color", "description": "= purple100, fondos sutiles" },
+      "purple50": { "value": "#FAF5FE", "type": "color" },
+      "purple100": { "value": "#F3E7FD", "type": "color", "description": "Hover de menus" },
+      "purple200": { "value": "#E7CEFB", "type": "color" },
+      "purple300": { "value": "#D2A8F4", "type": "color" },
+      "purple400": { "value": "#B566E9", "type": "color" },
+      "purple500": { "value": "#8917D4", "type": "color", "description": "= primary" },
+      "purple600": { "value": "#7A12BE", "type": "color" },
+      "purple700": { "value": "#62109A", "type": "color" },
+      "purple800": { "value": "#4B0D75", "type": "color" },
+      "purple900": { "value": "#350955", "type": "color" },
+      "bg": { "value": "#F7F6FB", "type": "color", "description": "Fondo general (tinte morado)" },
+      "surface": { "value": "#FFFFFF", "type": "color", "description": "Tarjetas y superficies elevadas" },
+      "surface2": { "value": "#F2F0F8", "type": "color", "description": "Contenedor sutil (hovers, zonas)" },
+      "textMain": { "value": "#1C1726", "type": "color", "description": "Texto principal (matiz morado)" },
+      "textMuted": { "value": "#6E6A7C", "type": "color", "description": "Texto secundario (gris morado)" },
+      "border": { "value": "#E8E4F0", "type": "color", "description": "Lineas divisorias (con tinte)" },
+      "danger": { "value": "#E5484D", "type": "color", "description": "Errores y acciones destructivas" },
+      "success": { "value": "#1F9254", "type": "color", "description": "Exito / confirmaciones" },
+      "warning": { "value": "#C77700", "type": "color", "description": "Advertencias" }
+    },
+    "borderRadius": {
+      "base": { "value": "10px", "type": "borderRadius", "description": "--border_radius" },
+      "card": { "value": "14px", "type": "borderRadius", "description": "Tarjetas y paneles" },
+      "modal": { "value": "16px", "type": "borderRadius", "description": "Modales" },
+      "pill": { "value": "999px", "type": "borderRadius", "description": "Pildoras / badges" }
+    },
+    "boxShadow": {
+      "sm": {
+        "value": [
+          { "x": "0", "y": "1", "blur": "3", "spread": "0", "color": "rgba(0,0,0,0.05)", "type": "dropShadow" },
+          { "x": "0", "y": "1", "blur": "2", "spread": "0", "color": "rgba(0,0,0,0.10)", "type": "dropShadow" }
+        ],
+        "type": "boxShadow",
+        "description": "--shadow_sm"
+      },
+      "md": {
+        "value": [
+          { "x": "0", "y": "4", "blur": "6", "spread": "-1", "color": "rgba(0,0,0,0.08)", "type": "dropShadow" },
+          { "x": "0", "y": "2", "blur": "4", "spread": "-1", "color": "rgba(0,0,0,0.04)", "type": "dropShadow" }
+        ],
+        "type": "boxShadow",
+        "description": "--shadow_md"
+      },
+      "dropdown": {
+        "value": [
+          { "x": "0", "y": "8", "blur": "24", "spread": "0", "color": "rgba(0,0,0,0.12)", "type": "dropShadow" }
+        ],
+        "type": "boxShadow",
+        "description": "Menu del avatar"
+      }
+    },
+    "fontFamilies": {
+      "base": { "value": "Inter", "type": "fontFamilies" }
+    },
+    "fontWeights": {
+      "regular": { "value": "400", "type": "fontWeights" },
+      "medium": { "value": "500", "type": "fontWeights" },
+      "semibold": { "value": "600", "type": "fontWeights" },
+      "bold": { "value": "700", "type": "fontWeights" }
+    },
+    "fontSizes": {
+      "h1": { "value": "35px", "type": "fontSizes", "description": "2.2rem" },
+      "h2": { "value": "22px", "type": "fontSizes", "description": "1.4rem" },
+      "h3": { "value": "19px", "type": "fontSizes", "description": "1.2rem" },
+      "body": { "value": "16px", "type": "fontSizes", "description": "1rem" },
+      "small": { "value": "14px", "type": "fontSizes", "description": "0.9rem" },
+      "label": { "value": "11px", "type": "fontSizes", "description": "0.7rem uppercase" }
+    },
+    "spacing": {
+      "xs": { "value": "4px", "type": "spacing" },
+      "sm": { "value": "8px", "type": "spacing" },
+      "md": { "value": "16px", "type": "spacing" },
+      "lg": { "value": "24px", "type": "spacing" },
+      "xl": { "value": "28px", "type": "spacing", "description": "gap estandar del layout 2 columnas" },
+      "xxl": { "value": "48px", "type": "spacing" }
+    }
+  },
+  "$themes": [],
+  "$metadata": {
+    "tokenSetOrder": ["global"]
+  }
+}

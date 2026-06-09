@@ -1,0 +1,27 @@
+# ================================================================
+#  Raíz del proyecto — protección de archivos sensibles.
+#
+#  El sitio se sirve por un subdominio con document root en /public.
+#  Esta carpeta raíz queda dentro de public_html, así que el dominio
+#  principal podría exponerla por /expoingtech/20261/miarriendo/...
+#
+#  IMPORTANTE: Apache lee los .htaccess que están por ENCIMA del docroot
+#  (con AllowOverride All), así que aquí NO se puede usar "Require all
+#  denied" (rompería el subdominio). Solo se bloquea por NOMBRE de archivo
+#  (dotfiles como .env, .gitignore): eso no afecta a /public, cuyos
+#  archivos no empiezan por punto.
+#
+#  La protección de las carpetas src/ y database/ va en sus propios
+#  .htaccess (no se traversan al servir /public, así que ahí sí se
+#  puede denegar todo).
+# ================================================================
+
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

@@ -14,6 +14,30 @@ date_default_timezone_set('America/Bogota');
 // Helper de configuración (necesario para leer APP_ENV antes que nada).
 require_once BASE_PATH . '/src/core/helpers.php';
 
+// --- Prefijo de ruta (despliegue en subcarpeta de cPanel) ----------------
+// Vacío en local (la app vive en la raíz). En producción se define en .env:
+//   APP_BASE_URL=/expoingtech/20261/miarriendo/public
+// El Router quita este prefijo al enrutar; redirect() y el filtro de salida
+// lo anteponen a las URLs absolutas. Así no hay que tocar cada vista.
+define('BASE_URL', rtrim((string) env('APP_BASE_URL', ''), '/'));
+
+/**
+ * Filtro de salida: antepone BASE_URL a las URLs absolutas ("/...") de la
+ * respuesta HTML. Solo actúa si hay prefijo y la respuesta es HTML (no toca
+ * PDFs ni binarios). Evita las protocol-relative ("//cdn...").
+ */
+function base_url_filtro(string $html): string
+{
+    if (BASE_URL === '' || stripos($html, '<html') === false) {
+        return $html;
+    }
+    return preg_replace(
+        '#\b(href|src|action|data-full)="/(?!/)#i',
+        '$1="' . BASE_URL . '/',
+        $html
+    );
+}
+
 // --- Manejo de errores según el entorno ---------------------------------
 // En producción nunca se muestran detalles al usuario: se registran (log).
 error_reporting(E_ALL);
@@ -76,6 +100,8 @@ require_once BASE_PATH . '/src/controllers/PanelController.php';
 require_once BASE_PATH . '/src/controllers/ContratoController.php';
 require_once BASE_PATH . '/src/controllers/BlogController.php';
 require_once BASE_PATH . '/src/controllers/CookiesController.php';
+require_once BASE_PATH . '/src/controllers/SistemaDisenoController.php';
+require_once BASE_PATH . '/src/controllers/LabM3Controller.php';
 
 $router = new Router();
 
@@ -83,6 +109,7 @@ $router = new Router();
 $router->get('/',            [HomeController::class, 'index']);
 $router->get('/arriendos',   [PropiedadController::class, 'index']);
 $router->get('/propiedades', [PropiedadController::class, 'create']);
+$router->get('/propiedades/exito', [PropiedadController::class, 'exito']);
 $router->post('/propiedades', [PropiedadController::class, 'store']);
 $router->get('/propiedad/{id}', [PropiedadController::class, 'detalle']);
 $router->get('/propiedad/{id}/editar',  [PropiedadController::class, 'editar']);
@@ -107,11 +134,20 @@ $router->post('/perfil/foto',       [PerfilController::class, 'subirFoto']);
 $router->get('/panel',       [PanelController::class, 'index']);
 $router->get('/blog',        [BlogController::class, 'index']);
 $router->get('/cookies',     [CookiesController::class, 'index']);
+$router->get('/sistema-diseno', [SistemaDisenoController::class, 'index']);
+$router->get('/lab/login',    [LabM3Controller::class, 'login']);
+$router->get('/lab/registro', [LabM3Controller::class, 'registro']);
+$router->get('/lab/panel',    [LabM3Controller::class, 'panel']);
 
 // --- Acciones (POST) ---
 $router->post('/login',      [AuthController::class, 'login']);
 $router->post('/registro',   [AuthController::class, 'registro']);
 $router->post('/logout',     [AuthController::class, 'logout']);
+
+// Si la app está en subcarpeta, reescribir las URLs absolutas de la salida.
+if (BASE_URL !== '') {
+    ob_start('base_url_filtro');
+}
 
 // Protección CSRF: toda petición que cambia estado (POST) debe traer un token válido.
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {

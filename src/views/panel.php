@@ -56,49 +56,114 @@ $titulos = [
                     <p class="u_text_muted">Este es el resumen de tu actividad en miarriendo.</p>
                 </header>
 
-                <div class="dash_stack">
-                    <section class="dash_panel">
-                        <h2>Necesita tu atención <?php if (count($atencion) > 0): ?><span class="panel_badge_num"><?= count($atencion) ?></span><?php endif; ?></h2>
-                        <?php if (empty($atencion)): ?>
-                            <div class="dash_empty">
-                                <span class="material-symbols-outlined">task_alt</span>
-                                <p>Todo al día. No tienes solicitudes pendientes por responder.</p>
-                            </div>
-                        <?php else: ?>
-                            <?php foreach ($atencion as $s): ?>
-                                <?php $ini = strtoupper(mb_substr($s['inquilino_nombre'] ?? '?', 0, 1)); ?>
-                                <div class="req_row">
-                                    <div class="req_avatar"><?= e($ini) ?></div>
-                                    <div class="req_info">
-                                        <strong><?= e($s['propiedad_titulo']) ?></strong>
-                                        <span><?= e(trim($s['inquilino_nombre'] . ' ' . $s['inquilino_apellidos'])) ?> · <?= $dinero($s['monto_mensual']) ?>/mes</span>
-                                    </div>
-                                    <a href="/contrato/<?= e($s['contrato_id']) ?>" class="btn_primary btn_sm">Responder</a>
+                <!-- Panel: ARRENDAR PROPIEDADES (switch = casa) -->
+                <div data-mode-panel="propiedades">
+                    <?php if (!empty($atencion)): ?>
+                    <section class="dash_panel" style="margin-bottom:20px;">
+                        <h2>Necesita tu atención <span class="panel_badge_num"><?= count($atencion) ?></span></h2>
+                        <?php foreach ($atencion as $s): ?>
+                            <?php $ini = strtoupper(mb_substr($s['inquilino_nombre'] ?? '?', 0, 1)); ?>
+                            <div class="req_row">
+                                <div class="req_avatar"><?= e($ini) ?></div>
+                                <div class="req_info">
+                                    <strong><?= e($s['propiedad_titulo']) ?></strong>
+                                    <span><?= e(trim($s['inquilino_nombre'] . ' ' . $s['inquilino_apellidos'])) ?> · <?= $dinero($s['monto_mensual']) ?>/mes</span>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                                <a href="/contrato/<?= e($s['contrato_id']) ?>" class="btn_primary btn_sm">Responder</a>
+                            </div>
+                        <?php endforeach; ?>
                     </section>
+                    <?php endif; ?>
 
-                    <section class="dash_panel">
-                        <h2>Actividad reciente</h2>
-                        <?php if (empty($actividad)): ?>
-                            <div class="dash_empty">
-                                <span class="material-symbols-outlined">history</span>
-                                <p>Aún no hay actividad. Empieza publicando o buscando una propiedad.</p>
+                    <section class="panel_section">
+                        <div class="panel_section_head">
+                            <h2 class="panel_section_title">Mis propiedades</h2>
+                            <a href="/panel?ver=mis-propiedades" class="text_link">Ver todas</a>
+                        </div>
+                        <?php if (empty($propiedades)): ?>
+                            <div class="empty_state">
+                                <span class="material-symbols-outlined">home_work</span>
+                                <p>Aún no has publicado ningún inmueble.</p>
+                                <a href="/propiedades" class="btn_primary">Publicar inmueble</a>
                             </div>
                         <?php else: ?>
-                            <?php foreach ($actividad as $ev): ?>
-                                <div class="act_item">
-                                    <span class="material-symbols-outlined"><?= e($ev['icono']) ?></span>
-                                    <div>
-                                        <p><?= e($ev['texto']) ?></p>
-                                        <?php if (!empty($ev['fecha'])): ?><time><?= e(tiempo_hace($ev['fecha'])) ?></time><?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                            <div class="properties_grid">
+                                <?php foreach ($propiedades as $p): ?>
+                                    <?php require __DIR__ . '/partials/property_card.php'; ?>
+                                <?php endforeach; ?>
+                            </div>
                         <?php endif; ?>
                     </section>
                 </div>
+
+                <!-- Panel: BUSCAR ARRIENDO (switch = llave) -->
+                <div data-mode-panel="arriendos" hidden>
+                    <section class="panel_section">
+                        <div class="panel_section_head">
+                            <h2 class="panel_section_title">Mis arriendos</h2>
+                            <a href="/arriendos" class="text_link">Buscar arriendos</a>
+                        </div>
+                        <?php if (empty($arriendos)): ?>
+                            <div class="empty_state">
+                                <span class="material-symbols-outlined">vpn_key</span>
+                                <p>No tienes arriendos activos.</p>
+                                <a href="/arriendos" class="btn_primary">Buscar arriendos</a>
+                            </div>
+                        <?php else: ?>
+                            <div class="arriendo_list">
+                                <?php foreach ($arriendos as $a): ?>
+                                    <div class="arriendo_row">
+                                        <div>
+                                            <strong><?= e($a['titulo']) ?></strong>
+                                            <span class="u_text_muted"><?= e($a['ciudad']) ?></span>
+                                        </div>
+                                        <div class="arriendo_precio">$<?= number_format((float) $a['precio_mensual'], 0, ',', '.') ?> / mes</div>
+                                        <span class="arriendo_estado"><?= e($a['estado']) ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    </section>
+
+                    <?php if (!empty($solicitudesEnviadas)): ?>
+                    <section class="panel_section">
+                        <h2 class="panel_section_title">Mis solicitudes</h2>
+                        <div class="solicitud_list">
+                            <?php foreach ($solicitudesEnviadas as $s): [$et, $ec] = $estadoContrato($s['estado']); ?>
+                                <a href="/contrato/<?= e($s['contrato_id']) ?>" class="solicitud_row">
+                                    <div class="solicitud_info">
+                                        <strong><?= e($s['propiedad_titulo']) ?></strong>
+                                        <span class="u_text_muted">Propietario: <?= e(trim($s['propietario_nombre'] . ' ' . $s['propietario_apellidos'])) ?></span>
+                                    </div>
+                                    <div class="solicitud_precio">$<?= number_format((float) $s['monto_mensual'], 0, ',', '.') ?> / mes</div>
+                                    <span class="contrato_estado_badge <?= e($ec) ?>"><?= e($et) ?></span>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Actividad reciente (siempre visible) -->
+                <section class="dash_panel" style="margin-top:20px;">
+                    <h2>Actividad reciente</h2>
+                    <?php if (empty($actividad)): ?>
+                        <div class="dash_empty">
+                            <span class="material-symbols-outlined">history</span>
+                            <p>Aún no hay actividad. Empieza publicando o buscando una propiedad.</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($actividad as $ev): ?>
+                            <div class="act_item">
+                                <span class="material-symbols-outlined"><?= e($ev['icono']) ?></span>
+                                <div>
+                                    <p><?= e($ev['texto']) ?></p>
+                                    <?php if (!empty($ev['fecha'])): ?><time><?= e(tiempo_hace($ev['fecha'])) ?></time><?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </section>
             </div>
 
             <!-- Columna derecha: resumen -->

@@ -1,35 +1,34 @@
 <?php
 /**
- * Tarjeta de propiedad reutilizable.
- * Espera la variable $p con: id, titulo, precio, direccion, imagen, estado.
+ * Tarjeta de propiedad (estilo minimalista). Toda la tarjeta es un enlace.
+ * Espera $p con: id, titulo, precio, ciudad, imagen, estado, habitaciones,
+ * banos, area, distancia (opcional), solicitudes (opcional, solo en el panel).
  */
+$disponible = ($p['estado'] ?? '') === 'Disponible';
+$area = $p['area'] ?? null;
+$areaTxt = $area !== null ? rtrim(rtrim(number_format((float) $area, 2, ',', '.'), '0'), ',') : null;
 ?>
-<article class="property_card">
-    <div class="property_image_container">
-        <span class="property_badge"><?= e($p['estado'] ?? 'Disponible') ?></span>
+<a href="/propiedad/<?= e($p['id']) ?>" class="pc">
+    <div class="pc_img">
+        <span class="pc_estado<?= $disponible ? '' : ' is_off' ?>"><?= $disponible ? 'Disponible' : 'Arrendada' ?></span>
         <?php if (!empty($p['solicitudes'])): ?>
-            <span class="property_badge_solicitudes" title="Solicitudes por firmar">
-                <span class="material-symbols-outlined icon_sm">draw</span>
-                <?= (int) $p['solicitudes'] ?> solicitud<?= $p['solicitudes'] > 1 ? 'es' : '' ?>
+            <span class="pc_solic" title="Solicitudes por firmar">
+                <span class="material-symbols-outlined">draw</span> <?= (int) $p['solicitudes'] ?>
             </span>
         <?php endif; ?>
-        <img src="<?= e($p['imagen']) ?>" alt="<?= e($p['titulo']) ?>">
+        <img src="<?= e($p['imagen']) ?>" alt="<?= e($p['titulo']) ?>" loading="lazy">
     </div>
-    <div class="property_content">
-        <div class="property_price">$<?= number_format((float) $p['precio'], 0, ',', '.') ?> / mes</div>
-        <h3 class="property_title"><?= e($p['titulo']) ?></h3>
-        <div class="property_location"><span class="material-symbols-outlined icon_sm">location_on</span> <?= e($p['direccion']) ?></div>
-        <?php if (!empty($p['distancia'])): ?>
-            <div class="property_distancia"><span class="material-symbols-outlined icon_sm">near_me</span> A <?= e($p['distancia']) ?> de ti</div>
-        <?php endif; ?>
-        <div class="property_footer">
-            <a href="/propiedad/<?= e($p['id']) ?>" class="btn_primary u_full_width">Ver propiedad</a>
-            <?php if (!empty($p['solicitudes'])): ?>
-                <a href="/panel?ver=solicitudes-recibidas" class="property_solicitudes_link">
-                    <span class="material-symbols-outlined icon_sm">draw</span>
-                    Firmar <?= (int) $p['solicitudes'] ?> contrato<?= $p['solicitudes'] > 1 ? 's' : '' ?>
-                </a>
-            <?php endif; ?>
+    <div class="pc_body">
+        <div class="pc_title"><?= e($p['titulo']) ?></div>
+        <div class="pc_price"><strong>$<?= number_format((float) $p['precio'], 0, ',', '.') ?></strong> / mes</div>
+        <div class="pc_meta">
+            <?php if (($p['habitaciones'] ?? null) !== null): ?><span class="material-symbols-outlined">bed</span> <?= (int) $p['habitaciones'] ?> · <?php endif; ?>
+            <?php if (($p['banos'] ?? null) !== null): ?><span class="material-symbols-outlined">bathtub</span> <?= (int) $p['banos'] ?> · <?php endif; ?>
+            <?php if ($areaTxt !== null): ?><span class="material-symbols-outlined">straighten</span> <?= e($areaTxt) ?> m² · <?php endif; ?>
+            <?= e($p['ciudad'] ?? '') ?>
         </div>
+        <?php if (!empty($p['distancia'])): ?>
+            <div class="pc_meta"><span class="material-symbols-outlined">near_me</span> A <?= e($p['distancia']) ?> de ti</div>
+        <?php endif; ?>
     </div>
-</article>
+</a>
